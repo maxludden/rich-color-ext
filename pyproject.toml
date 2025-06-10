@@ -1,10 +1,10 @@
 [project]
 name = "rich-color-ext"
-version = "0.1.0"
+version = "0.1.1"
 description = "Extend Rich with the ability to parse CSS color names and 3-digit hex colors."
 readme = "README.md"
 authors = [{ name = "Max Ludden", email = "dev@maxludden.com" }]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = ["pytest>=8.4.0", "rich>=14.0.0"]
 license = { text = "MIT" }
 classifiers = [
@@ -25,7 +25,4 @@ build-backend = "hatchling.build"
 pythonpath = ["src"]
 
 [dependency-groups]
-dev = [
-    "rich-gradient>=0.2.0",
-    "snoop>=0.6.0",
-]
+dev = []

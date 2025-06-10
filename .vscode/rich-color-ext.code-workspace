@@ -1,0 +1,27 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "/Users/maxludden/dev/py/rich-color-ext/.venv/bin/python",
+        "python.analysis.extraPaths": [
+            "/Users/maxludden/dev/py/rich-color-ext/src"
+        ],
+        "cSpell.ignoreWords": [
+            "notacolor",
+            "rprint"
+        ],
+        "cSpell.dictionaries": [
+            "python",
+            "rich"
+        ],
+        "cSpell.customDictionaries": {
+            "Max's Dictionary": {
+                "name": "Max's Dictionary",
+                "path": "/Users/maxludden/.config/cspell/Max's Dictionary.txt",
+            }
+        }
+    }
+}

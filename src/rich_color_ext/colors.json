@@ -996,9 +996,9 @@
     "violet": {
         "name": "violet",
         "hex": "#EE82EE",
-        "r": 238,
-        "g": 130,
-        "b": 238
+        "r": 215,
+        "g": 135,
+        "b": 255
     },
     "wheat": {
         "name": "wheat",
@@ -1010,9 +1010,9 @@
     "white": {
         "name": "white",
         "hex": "#FFFFFF",
-        "r": 255,
-        "g": 255,
-        "b": 255
+        "r": 192,
+        "g": 192,
+        "b": 192
     },
     "whitesmoke": {
         "name": "whitesmoke",
@@ -1024,8 +1024,8 @@
     "yellow": {
         "name": "yellow",
         "hex": "#FFFF00",
-        "r": 255,
-        "g": 255,
+        "r": 128,
+        "g": 128,
         "b": 0
     },
     "yellowgreen": {

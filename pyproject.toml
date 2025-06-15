@@ -1,6 +1,6 @@
 [project]
 name = "rich-color-ext"
-version = "0.1.1"
+version = "0.1.2"
 description = "Extend Rich with the ability to parse CSS color names and 3-digit hex colors."
 readme = "README.md"
 authors = [{ name = "Max Ludden", email = "dev@maxludden.com" }]

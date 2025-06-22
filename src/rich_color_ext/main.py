@@ -4,7 +4,7 @@ from typing import Dict
 from rich.color import Color, ColorParseError, ColorType
 from rich.color_triplet import ColorTriplet
 
-from rich_color_ext._css import CSSColors
+from rich_color_ext._css import CSSColors # type: ignore[import]
 
 # Preserve a reference to Rich's original Color.parse (the bound method)
 _original_parse = Color.parse
@@ -58,5 +58,3 @@ def _extended_parse(color: str) -> Color:
         raise ColorParseError(f"{_original_input!r} is not a valid color") from exc
 
 
-# Automatically patch Rich's Color parser when this module is imported
-# Color.parse = _extended_parse  # type: ignore[assignment]

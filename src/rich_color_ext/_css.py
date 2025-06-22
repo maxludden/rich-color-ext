@@ -88,9 +88,7 @@ class CSSColors(Dict[str, CSSColor]):
         return f"CSSColors({list(self.keys())})"
 
     def __contains__(self, item: object) -> bool:
-        if isinstance(item, str):
-            return item.lower() in self.keys()
-        return False
+        return item.lower() in self.keys() if isinstance(item, str) else False
 
     def __getitem__(self, item: str) -> CSSColor:
         if isinstance(item, str):

@@ -28,8 +28,9 @@ console = Console()
 console.print(
     Panel(
         "This is the rich_color_ext example for printing CSS named colors like, \
-[bold rebeccapurple]rebeccapurple[/bold rebeccapurple] and 3-digit hex \
-colors like, [bold #f0f]#f0f[/bold #f0f].",
+[bold rebeccapurple]rebeccapurple[/bold rebeccapurple], 3-digit hex \
+colors like, [bold #f0f]#f0f[/bold #f0f], and rich.color_triplet.ColorTriplet &\
+rich.color.Color instances.",
         padding=(1,2),
     )
 )

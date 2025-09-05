@@ -24,15 +24,18 @@ To make use of `rich-color-ext` all you need to do is import it.
 import rich_color_ext
 from rich.console import Console
 
-console = Console()
+console = Console(width=80)
 console.print(
     Panel(
-        "This is the rich_color_ext example for printing CSS named colors like, \
-[bold rebeccapurple]rebeccapurple[/bold rebeccapurple], 3-digit hex \
-colors like, [bold #f0f]#f0f[/bold #f0f], and rich.color_triplet.ColorTriplet &\
-rich.color.Color instances.",
-        padding=(1,2),
-    )
+        "This is the [b #00ff99]rich_color_ext[/b #00ff99] \
+example for printing CSS named colors ([bold rebeccapurple]\
+rebeccapurple[/bold rebeccapurple]), 3-digit hex \
+colors ([bold #f0f]#f0f[/bold #f0f]), and [b #99ff00]\
+rich.color_triplet.ColorTriplet[/b #99ff00] & [b #00ff00]\
+rich.color.Color[/b #00ff00] instances.",
+        padding=(1,2)
+    ),
+    justify="center"
 )
 ```
 
@@ -40,4 +43,6 @@ rich.color.Color instances.",
 
 Made by Max Ludden
 
-![maxlogo](https://raw.githubusercontent.com/maxludden/maxludden/refs/heads/gh-pages/Images/maxlogo.svg)
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/maxludden/maxludden/refs/heads/gh-pages/Images/maxlogo.svg" alt="maxlogo" style="width:25%; display:block; margin:0 auto;">
+</div>

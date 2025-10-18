@@ -1,7 +1,10 @@
-from rich_color_ext import install
+"""Create example.svg"""
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.terminal_theme import TerminalTheme
+
+from rich_color_ext import install
 
 install()
 
@@ -40,9 +43,9 @@ rebeccapurple[/bold rebeccapurple]), 3-digit hex \
 colors ([bold #f0f]#f0f[/bold #f0f]), and [b #99ff00]\
 rich.color_triplet.ColorTriplet[/b #99ff00] & [b #00ff00]\
 rich.color.Color[/b #00ff00] instances.",
-        padding=(1,2)
+        padding=(1, 2),
     ),
-    justify="center"
+    justify="center",
 )
 
 console.line(2)
@@ -50,4 +53,5 @@ console.line(2)
 console.save_svg(
     "example.svg",
     theme=GRADIENT_TERMINAL_THEME,
-    title="Rich Color Ext Example",)
+    title="Rich Color Ext Example",
+)

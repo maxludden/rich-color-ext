@@ -1,16 +1,14 @@
-from pathlib import Path
 from typing import List, Dict
-from json import load
 
 from rich.color_triplet import ColorTriplet
 from rich.text import Text
+from rich_color_ext.colors import COLOR_MAP_DATA
 
 __all__ = ["CSSColor", "CSSColors", "get_css_colors"]
 
 
-COLOR_DATA_PATH = Path(__file__).parent / "colors.json"
-with open(COLOR_DATA_PATH, "r") as f:
-    CSS_COLOR_MAP: Dict[str, Dict[str, str | int]] = load(f)
+CSS_COLOR_MAP: Dict[str, Dict[str, str | int]] = COLOR_MAP_DATA
+
 
 class CSSColor:
     """Class to handle CSS color names and their corresponding hex values."""
@@ -61,20 +59,22 @@ class CSSColor:
                 Text("rgb", style="orange"),
                 Text("=", style="bold #af00ff"),
                 Text("rgb", style=style),
-                Text("(", style='i #cccccc'),
+                Text("(", style="i #cccccc"),
                 Text(f"{self.red:>3}", style="bold #ff0000"),
-                Text(",", style='i #cccccc'),
+                Text(",", style="i #cccccc"),
                 Text(f"{self.green:>3}", style="bold #00ff00"),
-                Text(",", style='i #cccccc'),
+                Text(",", style="i #cccccc"),
                 Text(f"{self.blue:>3}", style="bold #0000ff"),
-                Text(")", style='i #cccccc'),
+                Text(")", style="i #cccccc"),
                 Text(">", style="bold white"),
             ]
         )
 
+
 def get_css_colors() -> List[CSSColor]:
     """Return a list of all CSS colors defined in the JSON file."""
     return [CSSColor.from_dict(color) for color in CSS_COLOR_MAP.keys()]
+
 
 class CSSColors(Dict[str, CSSColor]):
     """Dictionary-like class to access CSS colors by name."""
@@ -117,5 +117,6 @@ class CSSColors(Dict[str, CSSColor]):
 if __name__ == "__main__":
     CSS_COLORS: CSSColors = CSSColors()
     from rich import print
+
     for color in CSS_COLORS.values():
         print(color)

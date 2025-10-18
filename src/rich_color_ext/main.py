@@ -1,10 +1,10 @@
 # main.py
-from typing import Dict, Any
+from typing import Any, Dict
 
 from rich.color import Color, ColorParseError, ColorType
 from rich.color_triplet import ColorTriplet
 
-from rich_color_ext._css import CSSColors # type: ignore[import]
+from rich_color_ext._css import CSSColors  # type: ignore[import]
 
 # Preserve a reference to Rich's original Color.parse (the bound method)
 _original_parse = Color.parse
@@ -15,6 +15,7 @@ names = COLORS.names
 css_triplet: Dict[str, ColorTriplet] = {
     color.name: color.triplet for color in COLORS.values()
 }
+
 
 def get_css_color_triplet(color_name: str) -> ColorTriplet:
     """Get the RGB triplet for a given CSS color name."""
@@ -67,10 +68,10 @@ def _extended_parse(color: Any) -> Color:
             # CSS Level 4 or other extended color name
             css_color = COLORS.get(str(color).lower())
             if not css_color:
-                raise ColorParseError(f"{_original_input!r} is not a valid color") from exc
+                raise ColorParseError(
+                    f"{_original_input!r} is not a valid color"
+                ) from exc
             triplet = css_color.triplet  # e.g. "#663399" for "rebeccapurple"
             return Color(str(color), ColorType.TRUECOLOR, triplet=triplet)
         # If still not recognized, re-raise the parsing error to signal an invalid color
         raise ColorParseError(f"{_original_input!r} is not a valid color") from exc
-
-

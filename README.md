@@ -34,7 +34,7 @@ from rich.console import Console
 
 install()  # Patch Rich's Color.parse method
 
-console = Console(width=80)
+console = Console(width=64)
 console.print(
     Panel(
         "This is the [b #00ff99]rich_color_ext[/b #00ff99] \
@@ -59,3 +59,49 @@ rich.color.Color[/b #00ff00] instances.",
         <img src="https://raw.githubusercontent.com/maxludden/rich-gradient/a190326cccf4d5d14229a7e8d15867507b232750/docs/img/MaxLogo.svg" alt="maxlogo" style="width:25%; display:block; margin:0 auto;">
     </a>
 </div>
+
+## Packaging with PyInstaller
+
+When bundling the project with PyInstaller you must include the JSON resource `colors.json` so it is available at runtime inside the bundle. There are two simple ways to do this.
+
+1) Pass the file with the command-line option `--add-data`:
+
+     - macOS / Linux (colon separator):
+
+         ```shell
+         pyinstaller --onefile --add-data "src/rich_color_ext/colors.json:rich_color_ext" your_entry_script.py
+         ```
+
+     - Windows (semicolon separator):
+
+         ```powershell
+         pyinstaller --onefile --add-data "src\\rich_color_ext\\colors.json;rich_color_ext" your_entry_script.py
+         ```
+
+2) Add the file to the spec file's `Analysis.datas` list. Example snippet to paste into your `.spec` file:
+
+     ```python
+     a = Analysis(
+             ['your_entry_script.py'],
+             pathex=[],
+             binaries=[],
+             datas=[('src/rich_color_ext/colors.json', 'rich_color_ext')],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=None,
+     )
+     ```
+
+### Helper script
+
+A small helper script is provided to build with PyInstaller and automatically choose the correct data separator for your platform. By default it builds the example `src/rich_color_ext/cli.py` entry script but you can pass any entry script as the first argument.
+
+Usage:
+
+```shell
+./scripts/pyinstaller_build.sh [path/to/your_entry_script.py]  # src/rich_color_ext/cli.py
+```

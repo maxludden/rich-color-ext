@@ -4,18 +4,24 @@ description = "Extend Rich with the ability to parse CSS color names and 3-digit
 readme = "README.md"
 authors = [{ name = "Max Ludden", email = "dev@maxludden.com" }]
 requires-python = ">=3.10"
-dependencies = ["pytest>=8.4.0", "rich>=14.0.0"]
 dynamic = ["version"]
 license = { text = "MIT" }
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: 3.14"
 ]
 keywords = ["rich", "color", "css", "hex", "3-digit hex", "color names"]
+dependencies = ["pytest>=8.4.0", "rich>=14.0.0"]
+
+[project.scripts]
+rich-color-ext = "rich_color_ext.cli:main"
+rich-color = "rich_color_ext.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -25,7 +31,11 @@ build-backend = "hatchling.build"
 pythonpath = ["src"]
 
 [dependency-groups]
-dev = []
+dev = [
+    "astor>=0.8.1",
+    "loguru>=0.7.3",
+    "mypy>=1.18.2",
+]
 
 [tool.hatch.version]
 path = "src/rich_color_ext/__init__.py"

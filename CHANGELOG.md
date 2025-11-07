@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## v0.1.8 | 2025-11-07
+
+### Added Loguru dependency
+
+- Added `loguru` as a dependency for improved logging capabilities.
+- Integrated `loguru` logging into the package, with logging disabled by default.
+- Updated documentation to reflect the addition of `loguru`.
+- Removed CI configuration (GitHub Actions) from the repository; CI is no longer
+provided by the project by default. See repository policies for where CI is
+now hosted or how to re-enable it locally.
+
 ## v0.1.7 | 2025-11-07
 
 ### Edited

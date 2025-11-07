@@ -6,7 +6,7 @@ This package extends the Rich library's color parsing capabilities by adding sup
 It achieves this by patching the `Color.parse` method in Rich with an extended parser.
 """
 
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 
 from rich.traceback import install as tr_install
 

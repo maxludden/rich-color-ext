@@ -17,7 +17,11 @@ classifiers = [
     "Programming Language :: Python :: 3.14"
 ]
 keywords = ["rich", "color", "css", "hex", "3-digit hex", "color names"]
-dependencies = ["pytest>=8.4.0", "rich>=14.0.0"]
+dependencies = [
+    "loguru>=0.7.3",
+    "pytest>=8.4.0",
+    "rich>=14.0.0",
+]
 
 [project.scripts]
 rich-color-ext = "rich_color_ext.cli:main"
@@ -32,8 +36,6 @@ pythonpath = ["src"]
 
 [dependency-groups]
 dev = [
-    "astor>=0.8.1",
-    "loguru>=0.7.3",
     "mypy>=1.18.2",
 ]
 

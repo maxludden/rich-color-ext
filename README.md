@@ -51,6 +51,27 @@ rich.color.Color[/b #00ff00] instances.",
 
 ![example](example.svg)
 
+## Logging
+
+This package uses `loguru` for internal, developer-focused logging. By default the
+logger is disabled so importing the package is quiet during normal usage. If you
+need to enable internal debug output for troubleshooting, you can enable the
+logger at runtime. For example:
+
+```python
+from rich_color_ext import log
+
+# Enable internal logging emitted by rich-color-ext (useful for debugging)
+log.enable("rich_color_ext")
+
+# Revert to disabled state
+log.disable("rich_color_ext")
+```
+
+Note: `loguru` is used only for internal diagnostics and is not required at
+runtime for the library's primary functionality; it is disabled by default to
+avoid noisy output.
+
 <p style="text-align:center;">
     <a href="https://github.com/maxludden/rich-gradient"><code>rich-gradient</code> by Max Ludden</a>
 
@@ -62,7 +83,14 @@ rich.color.Color[/b #00ff00] instances.",
 
 ## Packaging with PyInstaller
 
-When bundling the project with PyInstaller you must include the JSON resource `colors.json` so it is available at runtime inside the bundle. There are two simple ways to do this.
+As of recent releases the CSS colour map is embedded in the Python package and a
+separate `colors.json` file is not required for normal usage. The library and
+CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles
+typically do not need any extra data files.
+
+If you are building or packaging an older distribution that expects a
+standalone `colors.json` file, or you intentionally rely on shipping the JSON
+resource, include it in the bundle using the legacy approaches below.
 
 1) Pass the file with the command-line option `--add-data`:
 

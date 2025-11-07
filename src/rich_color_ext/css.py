@@ -12,7 +12,6 @@ from typing import Dict, List, Optional, Tuple
 from rich.align import Align
 from rich.color_triplet import ColorTriplet
 from rich.columns import Columns
-from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
@@ -20,11 +19,11 @@ from rich.traceback import install as tr_install
 
 from rich_color_ext.logger import log
 
-__all__ = ["CSSColor", "CSSColors", "get_css_colors", "CSS_MAP"]
+__all__ = ["CSSColor", "CSSColors", "get_css_map"]
 
 tr_install()
 
-console = Console()
+# Console is only required for the demonstration block at module run-time.
 
 
 @lru_cache(maxsize=1024)
@@ -189,9 +188,6 @@ def get_css_map() -> dict[str, str]:
     return css_map
 
 
-CSS_MAP: dict[str, str] = get_css_map()
-
-
 # ------------------------------
 # Internal helpers
 # ------------------------------
@@ -261,23 +257,23 @@ class CSSColor:
             self.name = name
         if hex is not None:
             self.hex = hex
-        if red is not None:
+        if red == -1:
             self.red = red
-        if green is not None:
+        if green == -1:
             self.green = green
-        if blue is not None:
+        if blue == -1:
             self.blue = blue
 
         # Fill missing values when possible
-        if self._name and not self._hex and self._name in CSS_MAP:
-            self.hex = CSS_MAP[self._name]
+        if self._name and not self._hex and self._name in get_css_map():
+            self.hex = get_css_map()[self._name]
 
         if self._hex and (self._red < 0 or self._green < 0 or self._blue < 0):
             r, g, b = self.hex_to_rgb(self._hex)
             self._red, self._green, self._blue = r, g, b
 
         if not self._name and self._hex:
-            css_map = CSS_MAP or get_css_map()
+            css_map = get_css_map() or get_css_map()
             derived = _find_name_by_hex(self._hex, css_map)
             if derived:
                 self._name = derived
@@ -297,7 +293,7 @@ class CSSColor:
         """Create a CSSColor instance from a color name."""
         if not name:
             raise ValueError("Name must be a non-empty string.")
-        css_map = css_map or CSS_MAP or get_css_map()
+        css_map = css_map or get_css_map()
         norm = _normalize_name(name)
         log.debug(f"Creating CSSColor from name: name={norm!r}")
         hex_value = css_map.get(norm)
@@ -311,7 +307,7 @@ class CSSColor:
         """Create a CSSColor instance from a hex value."""
         if not hex:
             raise ValueError("Hex value must be a non-empty string.")
-        css_map = css_map or CSS_MAP or get_css_map()
+        css_map = css_map or get_css_map() or get_css_map()
         norm_hex = _normalize_hex(hex)
         name = _find_name_by_hex(norm_hex, css_map)
         if name is None:
@@ -333,7 +329,7 @@ class CSSColor:
                 raise ValueError(
                     f"{label.capitalize()} value must be between 0 and 255."
                 )
-        css_map = css_map or CSS_MAP or get_css_map()
+        css_map = css_map or get_css_map() or get_css_map()
         hex_str = _hex_from_rgb(red, green, blue)
         name = _find_name_by_hex(hex_str, css_map)
         if name is None:
@@ -375,8 +371,8 @@ class CSSColor:
         """Set the name of the color."""
         log.debug(f"Setting name to: {value!r}")
         self._name = _normalize_name(value)
-        if self._name in CSS_MAP and not self._hex:
-            self.hex = CSS_MAP[self._name]
+        if self._name in get_css_map() and not self._hex:
+            self.hex = get_css_map()[self._name]
             log.debug(f"Set hex from name: {self.hex=}")
         if self._hex and any(v < 0 for v in (self._red, self._green, self._blue)):
             red, green, blue = self.hex_to_rgb(self._hex)
@@ -398,7 +394,7 @@ class CSSColor:
             red, green, blue = self.hex_to_rgb(self._hex)
             self._red, self._green, self._blue = red, green, blue
         if not self._name:
-            css_map = CSS_MAP or get_css_map()
+            css_map = get_css_map() or get_css_map()
             name = _find_name_by_hex(self._hex, css_map)
             if name:
                 self._name = name
@@ -421,7 +417,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = CSS_MAP or get_css_map()
+                css_map = get_css_map() or get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -444,7 +440,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = CSS_MAP or get_css_map()
+                css_map = get_css_map() or get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -467,7 +463,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = CSS_MAP or get_css_map()
+                css_map = get_css_map() or get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -546,7 +542,7 @@ def get_css_colors(
 ) -> Generator[CSSColor, None, None]:
     """Return a list of all CSS colors defined in the JSON file."""
     if css_map is None:
-        css_map = CSS_MAP or get_css_map()
+        css_map = get_css_map() or get_css_map()
     yield from (CSSColor.from_name(color, css_map) for color in css_map)
 
 
@@ -562,11 +558,14 @@ class CSSColors(Dict[str, CSSColor]):
         return f"CSSColors({list(self.keys())})"
 
     def __contains__(self, item: object) -> bool:
-        return item.lower() in self.keys() if isinstance(item, str) else False
+        if not isinstance(item, str):
+            return False
+        key = _normalize_name(item)
+        return key in self.keys()
 
     def __getitem__(self, item: str) -> CSSColor:
         if isinstance(item, str):
-            key = item.lower()
+            key = _normalize_name(item)
             if key in self:
                 return super().__getitem__(key)
             raise KeyError(item)
@@ -588,8 +587,11 @@ class CSSColors(Dict[str, CSSColor]):
         return [color.triplet for color in self.values()]
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
+    from rich.console import Console  # pylint:disable=C0412
+
     css_colors = CSSColors()
+    console = Console()
     console.print(
         Columns(
             [color.panel() for color in css_colors.values()],

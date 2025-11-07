@@ -31,6 +31,21 @@ def get_css_color_map() -> dict[str, str]:
     global _CSS_CACHE  # pylint: disable=global-statement
     if _CSS_CACHE is not None:
         return _CSS_CACHE
+
+    # Prefer a package-level loader if present (newer layout exposes get_css_map
+    # on the package itself).
+    pkg_loader = getattr(_pkg, "get_css_map", None)
+    if callable(pkg_loader):
+        try:
+            result = pkg_loader()
+            if isinstance(result, dict):
+                _CSS_CACHE = {str(k).lower(): str(v) for k, v in result.items()}
+            else:
+                _CSS_CACHE = {}
+            return _CSS_CACHE
+        except (TypeError, ValueError, AttributeError, KeyError):
+            # fall through to other loaders
+            pass
     css_mod: ModuleType | None
     try:
         css_mod = importlib.import_module("rich_color_ext._css_colors")

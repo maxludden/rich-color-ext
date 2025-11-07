@@ -5,20 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.1.4 | 2025-11-04
+## v0.1.6 | 2025-11-06
 
-### Added `install()`, `uninstall()`, and `is_installed()` functions
-#### Changed
+### Changed
 
-- Added `install()`, `uninstall()`, and `is_installed()` functions to allow users to control when the extended color parser is active.
-- Updated README.md usage instructions to reflect the need to call `install()`.
-- 
+- Refactored `CSSColor` internals: helper functions were introduced for name/hex
+	normalisation and lookups; input validation is stricter and clearer errors (ValueError)
+	are raised for invalid inputs. Normalisation accepts `#abc`, `abc`, `#aabbcc`, `aabbcc`.
+- Normalisation of color names removes spaces and dashes and lowercases names.
+- Improved logging and docstrings in `src/rich_color_ext/css.py`.
+
+## v0.1.5 | 2025-11-05
+
+### Fixed
+
+- Resolved an indentation bug introduced during a refactor that caused import-time
+	SyntaxError in `css.py` under certain conditions. Added test runs to verify fixes.
 
 ## v0.1.4 | 2025-09-05
 
-### Can parse ColorTriplet and Color instances
-
-#### Changed
+### Changed
 
 - Allows Color to parse `rich.color_triplet.ColorTriplet` instances.
 - Allows Color to parse `rich.color.Color` instances.
+
+## v0.1.3 | 2025-08-01
+
+### Added
+
+- Introduced `install()`, `uninstall()`, and `is_installed()` functions to allow users to
+	control when the extended color parser is active.

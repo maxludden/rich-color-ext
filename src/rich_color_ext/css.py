@@ -20,7 +20,7 @@ from rich.traceback import install as tr_install
 
 from rich_color_ext.logger import log
 
-__all__ = ["CSSColor", "CSSColors", "get_css_colors"]
+__all__ = ["CSSColor", "CSSColors", "get_css_colors", "CSS_MAP"]
 
 tr_install()
 

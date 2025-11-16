@@ -22,6 +22,7 @@
                 "name": "Max's Dictionary",
                 "path": "/Users/maxludden/.config/cspell/Max's Dictionary.txt",
             }
-        }
+        },
+        "svg.preview.background": "transparent"
     }
 }

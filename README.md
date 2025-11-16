@@ -1,4 +1,15 @@
-# [rich-color-ext](https://GitHub.com/maxludden/rich-color-ext)
+# [![rich-color-ext](static/img/rich-color-ext-banner.svg)](https://GitHub.com/maxludden/rich-color-ext)
+
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2C%203.11%2C%203.12%2C%203.13-blue" alt="Python versions"></a>
+  <a href="https://pypi.org/project/rich_gradient/"><img src="https://img.shields.io/pypi/v/rich-color-ext" alt="PyPI version"></a>
+  <a href="https://github.com/astral-sh/uv"><img src="static/img/uv-badge.svg" alt="uv badge"></a>
+</p>
+
+<p align="center">
+    <a href="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml"><img src="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml/badge.svg" alt="Docs build status"></a>
+    <a href="https://maxludden.github.io/rich-color-ext/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue" alt="Docs"></a>
+</p>
 
 [`rich-color-ext`](https://GitHub.com/maxludden/rich-color-ext) extends the great [rich](http://GitHub.com/textualize/rich) library to be able to parse 3-digit hex colors (ie. <span style="color:#09f">`#09F`</span>) and [CSS color names](https://www.w3.org/TR/css-color-4/#css-color) (ie. <span style="color:rebeccapurple;">`rebeccapurple`</span>).
 
@@ -9,7 +20,7 @@
 ```shell
 # via uv directly
 uv add rich-color-ext
-````
+```
 
 or
 
@@ -73,37 +84,33 @@ runtime for the library's primary functionality; it is disabled by default to
 avoid noisy output.
 
 <p style="text-align:center;">
-    <a href="https://github.com/maxludden/rich-gradient"><code>rich-gradient</code> by Max Ludden</a>
+    <a href="https://github.com/maxludden/rich-color-ext"><code>rich-color-ext</code> by Max Ludden</a>
 
 <div style="text-align:center">
-    <a href="https://github.com/maxludden/rich-gradient">
-        <img src="https://raw.githubusercontent.com/maxludden/rich-gradient/a190326cccf4d5d14229a7e8d15867507b232750/docs/img/MaxLogo.svg" alt="maxlogo" style="width:25%; display:block; margin:0 auto;">
+    <a href="https://github.com/maxludden/rich-color-ext">
+        <img src="https://raw.githubusercontent.com/maxludden/rich-color-ext/a190326cccf4d5d14229a7e8d15867507b232750/static/img/MaxLogo.svg" alt="maxlogo" style="width:25%; display:block; margin:0 auto;">
     </a>
 </div>
 
 ## Packaging with PyInstaller
 
-As of recent releases the CSS colour map is embedded in the Python package and a
-separate `colors.json` file is not required for normal usage. The library and
-CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles
-typically do not need any extra data files.
+As of recent releases the CSS colour map is embedded in the Python package and a separate `colors.json` file is not required for normal usage. The library and CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles typically do not need any extra data files.
 
 If you are building or packaging an older distribution that expects a
-standalone `colors.json` file, or you intentionally rely on shipping the JSON
-resource, include it in the bundle using the legacy approaches below.
+standalone `colors.json` file, or you intentionally rely on shipping the JSON resource, include it in the bundle using the legacy approaches below.
 
 1) Pass the file with the command-line option `--add-data`:
 
      - macOS / Linux (colon separator):
 
          ```shell
-         pyinstaller --onefile --add-data "src/rich_color_ext/colors.json:rich_color_ext" your_entry_script.py
+         pyinstaller --onefile --add-data "static/json/colors.json:rich_color_ext" your_entry_script.py
          ```
 
      - Windows (semicolon separator):
 
          ```powershell
-         pyinstaller --onefile --add-data "src\\rich_color_ext\\colors.json;rich_color_ext" your_entry_script.py
+         pyinstaller --onefile --add-data "static\\json\\colors.json;rich_color_ext" your_entry_script.py
          ```
 
 2) Add the file to the spec file's `Analysis.datas` list. Example snippet to paste into your `.spec` file:
@@ -113,7 +120,7 @@ resource, include it in the bundle using the legacy approaches below.
              ['your_entry_script.py'],
              pathex=[],
              binaries=[],
-             datas=[('src/rich_color_ext/colors.json', 'rich_color_ext')],
+             datas=[('static/json/colors.json', 'rich_color_ext')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

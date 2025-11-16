@@ -1,11 +1,31 @@
 """Tests for CSS color name parsing (parameterized)."""
 
+import importlib.util
+import subprocess
 from collections.abc import Iterable
 
 import pytest
 
 from rich_color_ext import CSSColor, get_css_map
 from rich_color_ext.patch import _patched_parse
+
+
+def _ensure_packages() -> None:
+    """Ensure rich and rich-color-ext are installed, using uvx if needed."""
+    packages = ["rich", "rich_color_ext"]
+    for package in packages:
+        if importlib.util.find_spec(package) is None:
+            subprocess.check_call([
+                "uvx",
+                "--from",
+                package.replace("_", "-"),
+                "python",
+                "-c",
+                f"import {package}",
+            ])
+
+
+_ensure_packages()
 
 
 def _color_cases() -> Iterable[tuple[str, str]]:

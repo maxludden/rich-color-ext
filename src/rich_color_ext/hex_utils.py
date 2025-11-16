@@ -2,7 +2,9 @@
 """
 Helpers for handling hex color codes.
 """
+
 __all__ = ["expand_3digit_hex", "is_3digit_hex", "is_dark", "is_light"]
+
 
 def expand_3digit_hex(hex3: str) -> str:
     """
@@ -34,7 +36,7 @@ def is_3digit_hex(string: str) -> bool:
     Test whether a string is a 3-digit hex colour code (#ABC or ABC) case-insensitive.
 
     Args:
-        s: input string.
+        string: input string.
 
     Returns:
         True if matches 3-digit hex format.
@@ -44,18 +46,19 @@ def is_3digit_hex(string: str) -> bool:
         hex_str = hex_str[1:]
     return len(hex_str) == 3 and all(c in "0123456789abcdefABCDEF" for c in hex_str)
 
+
 def is_dark(hex_str: str) -> bool:
     """
     Determine if a hex colour is 'dark' based on its luminance.
 
     Args:
-        hex: A hex colour string of format '#RRGGBB'.)
+        hex_str: A hex colour string of format '#RRGGBB'.
     Returns:
         True if the colour is dark, False otherwise.
     """
     hex_str = hex_str.lstrip("#")
     if len(hex_str) != 6:
-        raise ValueError(f"Invalid hex colour: {hex!r}")
+        raise ValueError(f"Invalid hex colour: {hex_str!r}")
     r = int(hex_str[0:2], 16)
     g = int(hex_str[2:4], 16)
     b = int(hex_str[4:6], 16)
@@ -63,12 +66,13 @@ def is_dark(hex_str: str) -> bool:
     luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
     return luminance < 128
 
+
 def is_light(hex_str: str) -> bool:
     """
     Determine if a hex colour is 'light' based on its luminance.
 
     Args:
-        hex: A hex colour string of format '#RRGGBB'.)
+        hex_str: A hex colour string of format '#RRGGBB'.
     Returns:
         True if the colour is light, False otherwise.
     """

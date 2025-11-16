@@ -257,11 +257,12 @@ class CSSColor:
             self.name = name
         if hex is not None:
             self.hex = hex
-        if red == -1:
+        # Only set numeric channels if caller provided them (None means omitted)
+        if red is not None:
             self.red = red
-        if green == -1:
+        if green is not None:
             self.green = green
-        if blue == -1:
+        if blue is not None:
             self.blue = blue
 
         # Fill missing values when possible

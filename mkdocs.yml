@@ -7,36 +7,35 @@ site_author: Max Ludden
 site_dir: site
 
 nav:
-    - Home: index.md
-    - Usage: usage.md
-    - Reference:
-          - Package: reference/index.md
-          - CSS module: reference/css.md
-          - Modules: reference/modules.md
-          - Patch module: reference/patch.md
-          - Hex utils: reference/hex_utils.md
-          - CLI & Logger: reference/cli_logger.md
-    - Contact: contact.md
+  - Home: index.md
+  - Usage: usage.md
+  - Reference:
+      - Package: reference/index.md
+      - CSS module: reference/css.md
+      - Modules: reference/modules.md
+      - Patch module: reference/patch.md
+      - Hex utils: reference/hex_utils.md
+      - CLI & Logger: reference/cli_logger.md
+  - Contact: contact.md
 
 theme:
-    name: material
-    logo: img/rich-color-ext-favicon.svg
-    favicon: img/rich-color-ext-favicon.svg
-    features:
-        - navigation.instant
-        - navigation.instant.prefetch
-        - navigation.tracking
-        - content.code.annotate
-        - toc.integrate
-        - toc.follow
-        - navigation.path
-        - navigation.top
-        - content.code.copy
-    font:
-        code: Fira Code
-        text: "Urbanist"
-    palette:
-        
+  name: material
+  logo: img/rich-color-ext-favicon.svg
+  favicon: img/rich-color-ext-favicon.svg
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tracking
+    - content.code.annotate
+    - toc.integrate
+    - toc.follow
+    - navigation.path
+    - navigation.top
+    - content.code.copy
+  font:
+    code: Fira Code
+    text: "Urbanist"
+  palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:
@@ -57,52 +56,34 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
 
-        # - media: "(prefers-color-scheme)"
-        #   scheme: astral-light
-        #   toggle:
-        #       icon: material/brightness-auto
-        #       name: Switch to light mode
-        # - media: "(prefers-color-scheme: light)"
-        #   scheme: astral-light
-        #   toggle:
-        #       icon: material/brightness-7
-        #       name: Switch to dark mode
-        # - media: "(prefers-color-scheme: dark)"
-        #   scheme: astral-dark
-        #   toggle:
-        #       icon: material/brightness-4
-        #       name: Switch to system preference
-
 plugins:
-    - mkdocstrings
-    - search
+  - mkdocstrings
+  - search
 
 extra:
-    social:
-        - icon: fontawesome/brands/github
-          link: https://github.com/maxludden
-        - icon: fontawesome/brands/python
-          link: https://pypi.org/project/rich-color-ext
-extra_css:
-    - "styles/style.css"
-    - "styles/extra.css"
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/maxludden
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/rich-color-ext
+
 extra_javascript:
-    - "scripts/copy.js"
-    - "scripts/color-highlighter.js"
+  - "scripts/copy.js"
+  - "scripts/color-highlighter.js"
 markdown_extensions:
-    - abbr
-    - admonition
-    - attr_list
-    - def_list
-    - footnotes
-    - md_in_html
-    - toc:
-          permalink: true
-    - pymdownx.highlight:
-          anchor_linenums: true
-          line_spans: __span
-          pygments_lang_class: true
-    - pymdownx.inlinehilite
-    - pymdownx.snippets
-    - pymdownx.superfences
-    - pymdownx.details
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details

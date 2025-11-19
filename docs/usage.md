@@ -5,21 +5,22 @@ CSS: styles/extra.css,
 
 ## Installing
 
-Install from PyPI:
-
-```bash
-pip install rich-color-ext
-```
-
-Or using `uv` (recommended for some workflows):
-
-```bash
+Install using `uv`/`uv pip` (recommended):
+```sh
 # via uv directly
 uv add rich-color-ext
 
 # or via pip through uv
-uv pip add rich-color-ext
+uv pip install rich-color-ext
 ```
+
+Install from PyPI:
+
+```sh
+pip install rich-color-ext
+```
+
+
 
 ## Basic usage
 

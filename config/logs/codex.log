@@ -1,0 +1,51 @@
+2025-11-17 23:03:04 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:04 | INFO     | Starting Codex v1.8.14
+2025-11-17 23:03:04 | INFO     | Ensuring database is correct and up to date...
+2025-11-17 23:03:09 | SUCCESS  | Database ready.
+2025-11-17 23:03:09 | SUCCESS  | Created admin user.
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Auto Update = False
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Banner Text = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Folder View = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Import Metadata = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Lazy Import Metadata = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Non Users = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Registration = True
+2025-11-17 23:03:09 | INFO     | Created AdminFlag: Send Telemetry = True
+2025-11-17 23:03:09 | INFO     | Created Custom Covers Dir settings in the db.
+2025-11-17 23:03:09 | INFO     | root_path: 
+2025-11-17 23:03:09 | SUCCESS  | Running Codex v1.8.14
+2025-11-17 23:03:09 | SUCCESS  | BroadcastListener started.
+2025-11-17 23:03:10 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:11 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:11 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:12 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:12 | INFO     | LibrarianDaemon started all threads.
+2025-11-17 23:03:12 | SUCCESS  | LibrarianDaemon ready for tasks.
+2025-11-17 23:03:12 | INFO     | Started watching library /Users/maxludden/dev/py/rich-color-ext/config/custom-covers with poll
+2025-11-17 23:03:12 | INFO     | Library /Users/maxludden/dev/py/rich-color-ext/config/custom-covers waiting for manual poll.
+2025-11-17 23:03:12 | INFO     | Looking for search entries to update since the fracturing of the multiverse...
+2025-11-17 23:03:12 | INFO     | Looking for missing search entries to create...
+2025-11-17 23:03:12 | SUCCESS  | Search index found to be already synced in a moment.
+2025-11-17 23:03:24 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:24 | INFO     | Starting Codex v1.8.14
+2025-11-17 23:03:24 | INFO     | Ensuring database is correct and up to date...
+2025-11-17 23:03:24 | INFO     | Database up to date.
+2025-11-17 23:03:24 | SUCCESS  | Database ready.
+2025-11-17 23:03:24 | INFO     | root_path: 
+2025-11-17 23:03:24 | SUCCESS  | Running Codex v1.8.14
+2025-11-17 23:03:24 | SUCCESS  | BroadcastListener started.
+2025-11-17 23:03:24 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:25 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:25 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:26 | WARNING  | Cannot detect or read from CBR archives
+2025-11-17 23:03:26 | INFO     | LibrarianDaemon started all threads.
+2025-11-17 23:03:26 | SUCCESS  | LibrarianDaemon ready for tasks.
+2025-11-17 23:03:26 | INFO     | Started watching library /Users/maxludden/dev/py/rich-color-ext/config/custom-covers with poll
+2025-11-17 23:03:26 | INFO     | Library /Users/maxludden/dev/py/rich-color-ext/config/custom-covers waiting for manual poll.
+2025-11-17 23:03:26 | INFO     | Looking for search entries to update since the fracturing of the multiverse...
+2025-11-17 23:03:26 | INFO     | Looking for missing search entries to create...
+2025-11-17 23:03:26 | SUCCESS  | Search index found to be already synced in a moment.
+2025-11-17 23:03:50 | INFO     | LibrarianDaemon joined all threads.
+2025-11-17 23:56:44 | INFO     | Asking hypercorn to shut down gracefully. Could take 10 seconds...
+2025-11-17 23:56:44 | INFO     | BroadcastListener shutdown
+2025-11-17 23:56:44 | SUCCESS  | Goodbye.

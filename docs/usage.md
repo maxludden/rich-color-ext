@@ -3,6 +3,11 @@ title: Usage
 CSS: styles/extra.css,
 ---
 
+!!! note "Applies to v0.1.9"
+	The steps below describe the behaviour shipped with `rich-color-ext`
+	**v0.1.9**. If you are on an older release, upgrade with `uv pip
+	install --upgrade rich-color-ext` before following along.
+
 ## Installing
 
 Install using `uv`/`uv pip` (recommended):

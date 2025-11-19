@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## v0.1.9 | 2025-11-19
+
+### Changed
+
+- Bumped the package version to `v0.1.9` in preparation for the next
+	distribution build.
+- Updated the README and documentation landing page to clearly call out the
+	current release and how to verify what version is installed locally.
+- Added links back to this changelog from the README/docs so users can see the
+	latest changes at a glance.
+
+
 ## v0.1.8 | 2025-11-07
 
 ### Added Loguru dependency

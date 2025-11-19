@@ -13,6 +13,14 @@
 
 [`rich-color-ext`](https://GitHub.com/maxludden/rich-color-ext) extends the great [rich](http://GitHub.com/textualize/rich) library to be able to parse 3-digit hex colors (ie. <span style="color:#09f">`#09F`</span>) and [CSS color names](https://www.w3.org/TR/css-color-4/#css-color) (ie. <span style="color:rebeccapurple;">`rebeccapurple`</span>).
 
+> **Latest release:** `v0.1.9` (2025-11-19). See the [changelog](CHANGELOG.md) for the
+> full list of updates and run the command below to confirm which version is
+> installed locally.
+
+```shell
+python -c "import rich_color_ext; print(rich_color_ext.__version__)"
+```
+
 ## Installation
 
 ### [uv](https://docs.astral.sh/uv/) (recommended)

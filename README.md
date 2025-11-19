@@ -1,9 +1,9 @@
-# [![rich-color-ext](static/img/rich-color-ext-banner.svg)](https://GitHub.com/maxludden/rich-color-ext)
+# [![rich-color-ext](docs/img/rich-color-ext.svg)](https://GitHub.com/maxludden/rich-color-ext)
 
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2C%203.11%2C%203.12%2C%203.13-blue" alt="Python versions"></a>
   <a href="https://pypi.org/project/rich_gradient/"><img src="https://img.shields.io/pypi/v/rich-color-ext" alt="PyPI version"></a>
-  <a href="https://github.com/astral-sh/uv"><img src="static/img/uv-badge.svg" alt="uv badge"></a>
+  <a href="https://github.com/astral-sh/uv"><img src="docs/img/uv-badge.svg" alt="uv badge"></a>
 </p>
 
 <p align="center">

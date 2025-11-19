@@ -7,5 +7,12 @@ wheels/
 *.egg-info
 *.spec
 
+# Project-generated artifacts
+site/
+config/cache/
+config/logs/
+config/codex.sqlite3
+config/secret_key
+
 # Virtual environments
 .venv

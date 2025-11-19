@@ -91,15 +91,6 @@ Note: `loguru` is used only for internal diagnostics and is not required at
 runtime for the library's primary functionality; it is disabled by default to
 avoid noisy output.
 
-<p style="text-align:center;">
-    <a href="https://github.com/maxludden/rich-color-ext"><code>rich-color-ext</code> by Max Ludden</a>
-
-<div style="text-align:center">
-    <a href="https://github.com/maxludden/rich-color-ext">
-        <img src="https://raw.githubusercontent.com/maxludden/rich-color-ext/a190326cccf4d5d14229a7e8d15867507b232750/static/img/MaxLogo.svg" alt="maxlogo" style="width:25%; display:block; margin:0 auto;">
-    </a>
-</div>
-
 ## Packaging with PyInstaller
 
 As of recent releases the CSS colour map is embedded in the Python package and a separate `colors.json` file is not required for normal usage. The library and CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles typically do not need any extra data files.
@@ -148,3 +139,13 @@ Usage:
 ```shell
 ./scripts/pyinstaller_build.sh [path/to/your_entry_script.py]  # src/rich_color_ext/cli.py
 ```
+
+
+<p style="text-align:center;">
+    <a href="https://github.com/maxludden/rich-color-ext"><code>rich-color-ext</code> by Max Ludden</a>
+
+<div style="text-align:center">
+    <a href="https://github.com/maxludden/rich-color-ext">
+        <img src="docs/img/maxlogo.svg" alt="maxlogo" style="width:40%; display:block; margin:0 auto;">
+    </a>
+</div>

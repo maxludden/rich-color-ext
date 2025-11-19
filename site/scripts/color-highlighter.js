@@ -85,23 +85,44 @@ function highlightColorTokens() {
   });
 }
 
-if (typeof document !== "undefined") {
-  document.addEventListener("DOMContentLoaded", highlightColorTokens);
+let themeObserverInitialized = false;
 
-  // Re-highlight when theme changes in MkDocs Material
+function ensureThemeObserver() {
+  if (themeObserverInitialized || typeof MutationObserver === "undefined") {
+    return;
+  }
+
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'data-md-color-scheme') {
+      if (mutation.type === "attributes" && mutation.attributeName === "data-md-color-scheme") {
         highlightColorTokens();
       }
     });
   });
 
-  // Start observing theme changes on the document body
-  document.addEventListener("DOMContentLoaded", () => {
-    const body = document.querySelector('body');
-    if (body) {
-      observer.observe(body, { attributes: true, attributeFilter: ['data-md-color-scheme'] });
-    }
-  });
+  const body = document.querySelector("body");
+  if (body) {
+    observer.observe(body, { attributes: true, attributeFilter: ["data-md-color-scheme"] });
+    themeObserverInitialized = true;
+  }
+}
+
+function bootstrapHighlighting() {
+  highlightColorTokens();
+  ensureThemeObserver();
+}
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootstrapHighlighting, { once: true });
+  } else {
+    bootstrapHighlighting();
+  }
+
+  // MkDocs Material's instant navigation emits `document$` events for each page load.
+  if (typeof document$ !== "undefined") {
+    document$.subscribe(() => {
+      highlightColorTokens();
+    });
+  }
 }

@@ -8,7 +8,14 @@ title: Home
 
 ??? info "Latest release"
 
-    `rich-color-ext` is currently at **v0.1.9** (2025-11-19). Check the [changelog](https://github.com/maxludden/rich-color-ext/blob/main/CHANGELOG.md) for recent updates. To verify the version you have installed, run `python -c "import rich_color_ext; print(rich_color_ext.__version__)"`.
+    `rich-color-ext` is currently at **v0.1.9** (2025-11-19). Check the [changelog](https://github.com/maxludden/rich-color-ext/blob/main/CHANGELOG.md) for recent updates.
+
+    To verify the version you have installed, run
+
+    ```shell
+    python -c "import rich_color_ext; print(rich_color_ext.__version__)"
+    ```
+
 
 ## Key features
 

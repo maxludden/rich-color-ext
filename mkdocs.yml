@@ -57,7 +57,14 @@ theme:
         name: Switch to system preference
 
 plugins:
-  - mkdocstrings
+- mkdocstrings:
+      handlers:
+        python:
+          import:
+            - https://docs.python.org/3/objects.inv
+          options:
+            docstring_style: google
+            show_source: true
   - search
 
 extra:

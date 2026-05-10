@@ -282,7 +282,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "show":
         try:
             panel = show_color(args.name)
-        except KeyError:
+        except ValueError:
             console.print(f"Unknown color: {args.name}")
             return 2
         console.print(panel)

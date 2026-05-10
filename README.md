@@ -34,7 +34,7 @@ or
 
 ```shell
 # or via pip through uv
-uv pip add rich-color-ext
+uv pip install rich-color-ext
 ```
 
 ### [pip](https://pypi.org/project/rich-color-ext/)
@@ -93,7 +93,7 @@ avoid noisy output.
 
 ## Packaging with PyInstaller
 
-As of recent releases the CSS colour map is embedded in the Python package and a separate `colors.json` file is not required for normal usage. The library and CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles typically do not need any extra data files.
+As of recent releases the CSS color map is embedded in the Python package and a separate `colors.json` file is not required for normal usage. The library and CLI prefer the package-level `get_css_map()` function, so PyInstaller bundles typically do not need any extra data files.
 
 If you are building or packaging an older distribution that expects a
 standalone `colors.json` file, or you intentionally rely on shipping the JSON resource, include it in the bundle using the legacy approaches below.
@@ -146,6 +146,6 @@ Usage:
 
 <div style="text-align:center">
     <a href="https://github.com/maxludden/rich-color-ext">
-        <img src="docs/img/maxlogo.svg" alt="maxlogo" style="width:40%; display:block; margin:0 auto;">
+        <img src="docs/img/maxlogo.svg" alt="MaxLogo" style="width:40%; display:block; margin:0 auto;">
     </a>
 </div>

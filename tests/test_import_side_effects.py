@@ -9,10 +9,15 @@ import importlib.util
 import subprocess
 import sys
 
+import loguru
+import rich.traceback
+
 
 def _reimport_package():
-    # Remove package from sys.modules to force a fresh import.
-    sys.modules.pop("rich_color_ext", None)
+    # Remove package modules from sys.modules to force a fresh import.
+    for module_name in list(sys.modules):
+        if module_name == "rich_color_ext" or module_name.startswith("rich_color_ext."):
+            sys.modules.pop(module_name, None)
     return importlib.import_module("rich_color_ext")
 
 
@@ -40,7 +45,6 @@ def test_import_safe_when_find_spec_returns_none(monkeypatch):
     no subprocess invocation occurs during import.
     """
     called = []
-    called = []
 
     def _bad(*_args, **_kwargs):
         called.append(True)
@@ -52,3 +56,33 @@ def test_import_safe_when_find_spec_returns_none(monkeypatch):
     mod = _reimport_package()
     assert mod is not None
     assert not called, "subprocess.check_call was invoked during import"
+
+
+def test_import_does_not_mutate_global_logging(monkeypatch):
+    """Importing the package should not remove user-configured loguru sinks."""
+    called = []
+
+    def _bad(*_args, **_kwargs):
+        called.append(True)
+        raise RuntimeError("loguru.logger.remove should not be called during import")
+
+    monkeypatch.setattr(loguru.logger, "remove", _bad)
+
+    mod = _reimport_package()
+    assert mod is not None
+    assert not called, "loguru.logger.remove was invoked during import"
+
+
+def test_import_does_not_install_rich_tracebacks(monkeypatch):
+    """Rich traceback installation is a process-global behavior and should be opt-in."""
+    called = []
+
+    def _bad(*_args, **_kwargs):
+        called.append(True)
+        raise RuntimeError("rich.traceback.install should not be called during import")
+
+    monkeypatch.setattr(rich.traceback, "install", _bad)
+
+    mod = _reimport_package()
+    assert mod is not None
+    assert not called, "rich.traceback.install was invoked during import"

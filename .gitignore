@@ -16,3 +16,4 @@ config/secret_key
 
 # Virtual environments
 .venv
+codebook.toml

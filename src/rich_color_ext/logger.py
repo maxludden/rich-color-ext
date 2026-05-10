@@ -4,13 +4,9 @@ from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from rich.traceback import install as tr_install
 
-__all__ = ["log", "get_logger"]
+__all__ = ["log", "get_logger", "install_rich_sink"]
 
-tr_install()
-
-logger.remove()
 console = Console()
 LEVEL_STYLES = {
     "TRACE": {
@@ -83,8 +79,8 @@ def rich_sink(msg):
     )
 
 
-logger.add(rich_sink, level="DEBUG")
 log = logger.bind(module=__name__)
+logger.disable("rich_color_ext")
 
 
 def get_logger():
@@ -92,7 +88,14 @@ def get_logger():
     return log
 
 
+def install_rich_sink(level: str = "DEBUG") -> int:
+    """Install the Rich loguru sink and return its handler id."""
+    logger.enable("rich_color_ext")
+    return logger.add(rich_sink, level=level)
+
+
 if __name__ == "__main__":
+    install_rich_sink()
     log.debug("This is a debug message.")
     log.info("This is an info message.")
     log.warning("This is a warning message.")

@@ -40,3 +40,11 @@ def test_search_found():
     res = run_module(["search", "red", "--limit", "5"])
     assert res.returncode == 0
     assert "red" in res.stdout.lower()
+
+
+def test_show_unknown_color():
+    """Test that unknown colors produce a clean CLI error."""
+    res = run_module(["show", "notacolor"])
+    assert res.returncode == 2
+    assert "Unknown color: notacolor" in res.stdout
+    assert "Traceback" not in res.stderr

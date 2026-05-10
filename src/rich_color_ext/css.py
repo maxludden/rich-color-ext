@@ -1,8 +1,8 @@
 """CSS color utilities and rich renderables.
 
 This module provides a small convenience wrapper, :class:`CSSColor`, for
-working with CSS colour names and their hex/RGB representations, along with
-helpers to iterate all known colours. Data comes from ``_css_colors.get_css_map``.
+working with CSS color names and their hex/RGB representations, along with
+helpers to iterate all known colors. Data comes from ``_css_colors.get_css_map``.
 """
 
 from collections.abc import Generator
@@ -15,13 +15,10 @@ from rich.columns import Columns
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
-from rich.traceback import install as tr_install
 
 from rich_color_ext.logger import log
 
 __all__ = ["CSSColor", "CSSColors", "get_css_map"]
-
-tr_install()
 
 # Console is only required for the demonstration block at module run-time.
 
@@ -29,11 +26,11 @@ tr_install()
 @lru_cache(maxsize=1024)
 def get_css_map() -> dict[str, str]:
     """
-    Return the mapping of CSS colour name (lowercase) → hex string (‘#RRGGBB’).
+    Return the mapping of CSS color name (lowercase) → hex string (‘#RRGGBB’).
     Loads the data on first call.
 
     Returns:
-        Dict mapping colour name to hex.
+        Dict mapping color name to hex.
     """
     css_map = {
         "aliceblue": "#f0f8ff",
@@ -192,7 +189,7 @@ def get_css_map() -> dict[str, str]:
 # Internal helpers
 # ------------------------------
 def _normalize_name(value: str) -> str:
-    """Normalize a CSS colour name: strip spaces/dashes and lowercase."""
+    """Normalize a CSS color name: strip spaces/dashes and lowercase."""
     value = value.replace(" ", "").replace("-", "").strip().lower()
     return value
 
@@ -219,7 +216,7 @@ def _normalize_hex(value: str) -> str:
 
 
 def _find_name_by_hex(hex_value: str, css_map: dict[str, str]) -> Optional[str]:
-    """Return the first colour name mapping to ``hex_value`` (case-insensitive)."""
+    """Return the first color name mapping to ``hex_value`` (case-insensitive)."""
     hex_low = hex_value.lower()
     return next((k for k, v in css_map.items() if v.lower() == hex_low), None)
 
@@ -242,7 +239,7 @@ class CSSColor:
         """Create a CSSColor.
 
         You may provide any combination of name/hex/RGB sufficient to derive the
-        remaining attributes. Values are normalised and validated.
+        remaining attributes. Values are normalized and validated.
         """
         log.debug(f"Creating CSSColor({name=}, {hex=}, {red=}, {green=}, {blue=})")
 
@@ -280,11 +277,7 @@ class CSSColor:
                 self._name = derived
 
         # Final validation
-        if (
-            not self._name
-            or not self._hex
-            or any(v < 0 or v > 255 for v in (self._red, self._green, self._blue))
-        ):
+        if not self._name or not self._hex or any(v < 0 or v > 255 for v in (self._red, self._green, self._blue)):
             raise ValueError("Unable to determine color.")
 
     @classmethod

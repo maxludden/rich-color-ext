@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml"><img src="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml/badge.svg" alt="Docs build status"></a>
+    <a href="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml"><img src="https://github.com/maxludden/rich-color-ext/actions/workflows/docs-deploy.yml`/badge.svg" alt="Docs build status"></a>
     <a href="https://maxludden.github.io/rich-color-ext/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue" alt="Docs"></a>
 </p>
 

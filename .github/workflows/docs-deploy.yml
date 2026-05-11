@@ -37,6 +37,12 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+
+    # Added environment so Pages deployment can be created successfully.
+    environment:
+      name: github-pages
+      url: https://maxludden.github.io/rich-color-ext
+
     permissions:
       contents: read
       pages: write

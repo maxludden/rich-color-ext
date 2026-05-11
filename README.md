@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2C%203.11%2C%203.12%2C%203.13-blue" alt="Python versions"></a>
-  <a href="https://pypi.org/project/rich_gradient/"><img src="https://img.shields.io/pypi/v/rich-color-ext" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/rich_color_ext/"><img src="https://img.shields.io/pypi/v/rich-color-ext" alt="PyPI version"></a>
   <a href="https://github.com/astral-sh/uv"><img src="docs/img/uv-badge.svg" alt="uv badge"></a>
 </p>
 
@@ -13,13 +13,6 @@
 
 [`rich-color-ext`](https://GitHub.com/maxludden/rich-color-ext) extends the great [rich](http://GitHub.com/textualize/rich) library to be able to parse 3-digit hex colors (ie. <span style="color:#09f">`#09F`</span>) and [CSS color names](https://www.w3.org/TR/css-color-4/#css-color) (ie. <span style="color:rebeccapurple;">`rebeccapurple`</span>).
 
-> **Latest release:** `v0.1.9` (2025-11-19). See the [changelog](CHANGELOG.md) for the
-> full list of updates and run the command below to confirm which version is
-> installed locally.
-
-```shell
-python -c "import rich_color_ext; print(rich_color_ext.__version__)"
-```
 
 ## Installation
 

@@ -7,7 +7,6 @@ helpers to iterate all known colors. Data comes from ``_css_colors.get_css_map``
 
 from collections.abc import Generator
 from functools import lru_cache
-from typing import Dict, List, Optional, Tuple
 
 from rich.align import Align
 from rich.color_triplet import ColorTriplet
@@ -26,7 +25,7 @@ __all__ = ["CSSColor", "CSSColors", "get_css_map"]
 @lru_cache(maxsize=1024)
 def get_css_map() -> dict[str, str]:
     """
-    Return the mapping of CSS color name (lowercase) → hex string (‘#RRGGBB’).
+    Return the mapping of CSS color name (lowercase) to hex string (`#RRGGBB`).
     Loads the data on first call.
 
     Returns:
@@ -207,15 +206,13 @@ def _normalize_hex(value: str) -> str:
     if len(value) == 3:
         value = value[0] * 2 + value[1] * 2 + value[2] * 2
     elif len(value) != 6:
-        raise ValueError(
-            "Hex value must be a string in the format '#RGB' or '#RRGGBB'."
-        )
+        raise ValueError("Hex value must be a string in the format '#RGB' or '#RRGGBB'.")
     # Validate hex characters and return in canonical uppercase with leading '#'
     int(value, 16)  # will raise ValueError if not hex
     return f"#{value.upper()}"
 
 
-def _find_name_by_hex(hex_value: str, css_map: dict[str, str]) -> Optional[str]:
+def _find_name_by_hex(hex_value: str, css_map: dict[str, str]) -> str | None:
     """Return the first color name mapping to ``hex_value`` (case-insensitive)."""
     hex_low = hex_value.lower()
     return next((k for k, v in css_map.items() if v.lower() == hex_low), None)
@@ -230,11 +227,11 @@ class CSSColor:
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        hex: Optional[str] = None,  # pylint:disable=W0622
-        red: Optional[int] = None,
-        green: Optional[int] = None,
-        blue: Optional[int] = None,
+        name: str | None = None,
+        hex: str | None = None,  # pylint:disable=W0622
+        red: int | None = None,
+        green: int | None = None,
+        blue: int | None = None,
     ) -> None:
         """Create a CSSColor.
 
@@ -277,13 +274,15 @@ class CSSColor:
                 self._name = derived
 
         # Final validation
-        if not self._name or not self._hex or any(v < 0 or v > 255 for v in (self._red, self._green, self._blue)):
+        if (
+            not self._name
+            or not self._hex
+            or any(v < 0 or v > 255 for v in (self._red, self._green, self._blue))
+        ):
             raise ValueError("Unable to determine color.")
 
     @classmethod
-    def from_name(
-        cls, name: str, css_map: Optional[dict[str, str]] = None
-    ) -> "CSSColor":
+    def from_name(cls, name: str, css_map: dict[str, str] | None = None) -> "CSSColor":
         """Create a CSSColor instance from a color name."""
         if not name:
             raise ValueError("Name must be a non-empty string.")
@@ -297,7 +296,7 @@ class CSSColor:
         return cls(name=norm, hex=hex_value, red=red, green=green, blue=blue)
 
     @classmethod
-    def from_hex(cls, hex: str, css_map: Optional[dict[str, str]] = None) -> "CSSColor":  # pylint:disable=W0622
+    def from_hex(cls, hex: str, css_map: dict[str, str] | None = None) -> "CSSColor":  # pylint:disable=W0622
         """Create a CSSColor instance from a hex value."""
         if not hex:
             raise ValueError("Hex value must be a non-empty string.")
@@ -315,14 +314,12 @@ class CSSColor:
         red: int,
         green: int,
         blue: int,
-        css_map: Optional[dict[str, str]] = None,
+        css_map: dict[str, str] | None = None,
     ) -> "CSSColor":
         """Create a CSSColor instance from RGB values."""
         for channel, label in ((red, "red"), (green, "green"), (blue, "blue")):
             if not 0 <= channel <= 255:
-                raise ValueError(
-                    f"{label.capitalize()} value must be between 0 and 255."
-                )
+                raise ValueError(f"{label.capitalize()} value must be between 0 and 255.")
         css_map = css_map or get_css_map() or get_css_map()
         hex_str = _hex_from_rgb(red, green, blue)
         name = _find_name_by_hex(hex_str, css_map)
@@ -343,7 +340,7 @@ class CSSColor:
         )
 
     @staticmethod
-    def hex_to_rgb(hex_str: str) -> Tuple[int, int, int]:
+    def hex_to_rgb(hex_str: str) -> tuple[int, int, int]:
         """Return the RGB components as a tuple.
         Returns:
             Tuple[int, int, int]: The RGB components.
@@ -467,17 +464,19 @@ class CSSColor:
         class_style = f"bold {self.hex}" if not reverse else f"bold on {self.hex}"
         color_style = f"bold on {self.hex}" if reverse else f"bold {self.hex}"
         label_style = f"bold black on {self.hex}" if reverse else "bold white"
-        return Text.assemble(*[
-            Text("CSSColor", style=class_style),
-            Text("<", style=color_style),
-            Text("hex=", style=label_style),
-            Text(f"'{self.hex}'", style=color_style),
-            Text(", rgb='", style=label_style),
-            self.rgb(reverse),
-            Text(", name=", style=label_style),
-            Text(f"{self.name!r}'", style=color_style),
-            Text(">", style=color_style),
-        ])
+        return Text.assemble(
+            *[
+                Text("CSSColor", style=class_style),
+                Text("<", style=color_style),
+                Text("hex=", style=label_style),
+                Text(f"'{self.hex}'", style=color_style),
+                Text(", rgb='", style=label_style),
+                self.rgb(reverse),
+                Text(", name=", style=label_style),
+                Text(f"{self.name!r}'", style=color_style),
+                Text(">", style=color_style),
+            ]
+        )
 
     def __rich__(self) -> Text:
         """Return a Rich Text representation of the color."""
@@ -490,15 +489,17 @@ class CSSColor:
         green_style = "bold #00AA00" if not reverse else f"bold #00AA00 on {self.hex}"
         blue_style = "bold #00AAFF" if not reverse else f"bold #00AAFF on {self.hex}"
 
-        rgb = Text.assemble(*[
-            Text("rgb(", style=style),
-            Text(f"{self.red}", style=red_style),
-            Text(",", style=style),
-            Text(f"{self.green}", style=green_style),
-            Text(",", style=style),
-            Text(f"{self.blue}", style=blue_style),
-            Text(")", style=style),
-        ])
+        rgb = Text.assemble(
+            *[
+                Text("rgb(", style=style),
+                Text(f"{self.red}", style=red_style),
+                Text(",", style=style),
+                Text(f"{self.green}", style=green_style),
+                Text(",", style=style),
+                Text(f"{self.blue}", style=blue_style),
+                Text(")", style=style),
+            ]
+        )
         return rgb
 
     def panel(self) -> Panel:
@@ -514,9 +515,7 @@ class CSSColor:
 
         table.add_column("Hex")
         table.add_column("RGB")
-        table.add_row(
-            Text(self.hex, style=f"bold {self.hex}"), Align(self.rgb(), align="center")
-        )
+        table.add_row(Text(self.hex, style=f"bold {self.hex}"), Align(self.rgb(), align="center"))
         return Panel(
             table,
             title=f"[bold on {self.hex}] {self.name.capitalize()} [/bold on {self.hex}]",
@@ -532,7 +531,7 @@ class CSSColor:
 
 
 def get_css_colors(
-    css_map: Optional[dict[str, str]] = None,
+    css_map: dict[str, str] | None = None,
 ) -> Generator[CSSColor, None, None]:
     """Return a list of all CSS colors defined in the JSON file."""
     if css_map is None:
@@ -540,10 +539,10 @@ def get_css_colors(
     yield from (CSSColor.from_name(color, css_map) for color in css_map)
 
 
-class CSSColors(Dict[str, CSSColor]):
+class CSSColors(dict[str, CSSColor]):
     """Dictionary-like class to access CSS colors by name."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         for color in get_css_colors():
             self[color.name] = color
@@ -566,17 +565,17 @@ class CSSColors(Dict[str, CSSColor]):
         raise KeyError(item)
 
     @property
-    def names(self) -> List[str]:
+    def names(self) -> list[str]:
         """Return a list of all CSS color names."""
         return list(self.keys())
 
     @property
-    def hex_values(self) -> List[str]:
+    def hex_values(self) -> list[str]:
         """Return a list of all CSS color hex values."""
         return [color.hex for color in self.values()]
 
     @property
-    def triplets(self) -> List[ColorTriplet]:
+    def triplets(self) -> list[ColorTriplet]:
         """Return a list of all CSS color RGB triplets."""
         return [color.triplet for color in self.values()]
 

@@ -17,3 +17,6 @@ config/secret_key
 # Virtual environments
 .venv
 codebook.toml
+
+# Local agent settings (machine-specific, not shared)
+.claude/

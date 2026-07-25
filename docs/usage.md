@@ -39,7 +39,9 @@ from rich.console import Console
 install()  # Patch Rich's Color.parse method
 
 console = Console(width=64)
-console.print("This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/].")
+console.print(
+    "This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/]."
+)
 ```
 
 The package also provides `CSSColor` helpers and a `get_css_map()` function to
@@ -52,6 +54,7 @@ Enable it at runtime to see diagnostic information:
 
 ```python
 from rich_color_ext import log
+
 log.enable("rich_color_ext")
 # ... do things that exercise the library ...
 log.disable("rich_color_ext")

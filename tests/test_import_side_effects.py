@@ -8,12 +8,13 @@ import importlib
 import importlib.util
 import subprocess
 import sys
+from types import ModuleType
 
 import loguru
 import rich.traceback
 
 
-def _reimport_package():
+def _reimport_package() -> ModuleType:
     # Remove package modules from sys.modules to force a fresh import.
     for module_name in list(sys.modules):
         if module_name == "rich_color_ext" or module_name.startswith("rich_color_ext."):
@@ -39,6 +40,7 @@ def test_import_does_not_call_subprocess_check_call(monkeypatch):
     mod = _reimport_package()
     assert mod is not None
     assert not called, "subprocess.check_call was invoked during import"
+
 
 def test_import_safe_when_find_spec_returns_none(monkeypatch):
     """Simulate missing dependencies by making find_spec return None and ensure

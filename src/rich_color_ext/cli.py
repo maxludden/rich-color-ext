@@ -9,9 +9,9 @@ import importlib
 import importlib.metadata
 import importlib.resources
 import json
+from collections.abc import Iterable
 from functools import lru_cache
 from types import ModuleType
-from typing import Iterable
 
 from rich.console import Console
 from rich.panel import Panel
@@ -66,7 +66,7 @@ def get_css_color_map() -> dict[str, str]:
             else:
                 items = getattr(result, "items", None)
                 if callable(items):
-                    for key, value in items():  # type: ignore[call-arg]
+                    for key, value in items():
                         normalized[str(key).lower()] = str(value)
             _CSS_CACHE = normalized
             return _CSS_CACHE
@@ -167,9 +167,7 @@ def show_color(name: str) -> Panel:
 
 
 def _build_table(names: Iterable[str]) -> Table:
-    table = Table(
-        title="[b yellow]CSS Colors[/b yellow]", show_header=True, expand=False
-    )
+    table = Table(title="[b yellow]CSS Colors[/b yellow]", show_header=True, expand=False)
     table.add_column("sample")
     table.add_column("name")
     table.add_column("hex")
@@ -186,15 +184,17 @@ def _build_table(names: Iterable[str]) -> Table:
             f"[on {hex_str}]{' ' * 10}[/]",
             f"[b {hex_str}]{name}[/]",
             Text(f" {hex_str} ", style=f"bold on {hex_str}"),
-            Text.assemble(*[
-                Text("rgb(", style=f"bold {hex_str}"),
-                Text(f"{r: >3}", style="bold #FF0000"),
-                Text(",", style=f"bold {hex_str}"),
-                Text(f"{g: >3}", style="bold #00FF00"),
-                Text(",", style=f"bold {hex_str}"),
-                Text(f"{b: >3}", style="bold #0000FF"),
-                Text(")", style=f"bold {hex_str}"),
-            ]),
+            Text.assemble(
+                *[
+                    Text("rgb(", style=f"bold {hex_str}"),
+                    Text(f"{r: >3}", style="bold #FF0000"),
+                    Text(",", style=f"bold {hex_str}"),
+                    Text(f"{g: >3}", style="bold #00FF00"),
+                    Text(",", style=f"bold {hex_str}"),
+                    Text(f"{b: >3}", style="bold #0000FF"),
+                    Text(")", style=f"bold {hex_str}"),
+                ]
+            ),
         )
     return table
 
@@ -216,16 +216,12 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("uninstall", help="Restore Rich's original color parser")
 
     ls = sub.add_parser("list", help="List available CSS color names")
-    ls.add_argument(
-        "--limit", type=int, default=0, help="Limit number of names printed"
-    )
+    ls.add_argument("--limit", type=int, default=0, help="Limit number of names printed")
     ls.add_argument("--pretty", action="store_true", help="Show a pretty table")
 
     search = sub.add_parser("search", help="Search CSS color names by substring")
     search.add_argument("query", help="Substring to search for (case-insensitive)")
-    search.add_argument(
-        "--limit", type=int, default=0, help="Limit number of names printed"
-    )
+    search.add_argument("--limit", type=int, default=0, help="Limit number of names printed")
     search.add_argument("--pretty", action="store_true", help="Show a pretty table")
 
     show = sub.add_parser("show", help="Show hex and RGB for a CSS color name")
@@ -235,9 +231,7 @@ def main(argv: list[str] | None = None) -> int:
     console = Console()
 
     if args.version:
-        console.print(
-            f"\n[bold #99ff00]rich-color-ext[/] [bold #00ffff]v{__version__}[/]"
-        )
+        console.print(f"\n[bold #99ff00]rich-color-ext[/] [bold #00ffff]v{__version__}[/]")
         return 0
 
     if args.command == "install":

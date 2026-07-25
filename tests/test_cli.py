@@ -1,13 +1,14 @@
 """Tests for rich_color_ext.cli module."""
+
 import os
 import subprocess
 import sys
 from pathlib import Path
 
 
-def run_module(args):
+def run_module(args: list[str]) -> subprocess.CompletedProcess[str]:
     """Run the rich_color_ext.cli module with given arguments."""
-    cmd = [sys.executable, "-m", "rich_color_ext.cli"] + args
+    cmd = [sys.executable, "-m", "rich_color_ext.cli", *args]
     env = os.environ.copy()
     # ensure subprocess can import package from local src/ during tests
     repo_root = Path(__file__).resolve().parents[1]

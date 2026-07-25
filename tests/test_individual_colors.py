@@ -1,4 +1,5 @@
 """Additional tests for CSS color parsing utilities."""
+
 from collections.abc import Iterable
 
 import pytest

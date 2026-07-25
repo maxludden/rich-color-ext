@@ -1,14 +1,21 @@
 """A Rich-based loguru logger sink."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-__all__ = ["log", "get_logger", "install_rich_sink"]
+if TYPE_CHECKING:
+    from loguru import Logger
+
+__all__: list[str] = ["get_logger", "install_rich_sink", "log"]
 
 console = Console()
-LEVEL_STYLES = {
+LEVEL_STYLES: dict[str, dict[str, str | int]] = {
     "TRACE": {
         "text": "#FFFFFF",
         "title": "bold #FFFFFF on #00AA82",
@@ -52,7 +59,7 @@ LEVEL_STYLES = {
 }
 
 
-def rich_sink(msg):
+def rich_sink(msg: Any) -> None:
     """A Rich-based loguru sink."""
     record = msg.record
     # inspect(record, all=True, console=console, private=True, dunder=True)
@@ -60,30 +67,31 @@ def rich_sink(msg):
     level_icon = record["level"].icon
     file = record["file"].name
     line = record["line"]
-    line_str = f"Line {line}"
-    left_pad = " " * LEVEL_STYLES[level_name].get("left", 0)
-    right_pad = " " * LEVEL_STYLES[level_name].get("right", 0)
-    title_str = f"{level_icon} {left_pad}{level_name}{right_pad} \
+    line_str: str = f"Line {line}"
+    style: dict[str, str | int] = LEVEL_STYLES[level_name]
+    left_pad: str = " " * int(style.get("left", 0))
+    right_pad: str = " " * int(style.get("right", 0))
+    title_str: str = f"{level_icon} {left_pad}{level_name}{right_pad} \
  {level_icon}  {file:>12}:{line_str:9}"
-    title_text = Text(title_str, style=LEVEL_STYLES[level_name]["title"])
+    title_text = Text(title_str, style=str(style["title"]))
     msg_str = str(record["message"])
-    msg_text = Text(msg_str, style=LEVEL_STYLES[level_name]["text"])
+    msg_text = Text(msg_str, style=str(style["text"]))
     console.print(
         Panel(
             msg_text,
             title=title_text,
             title_align="left",
-            border_style=LEVEL_STYLES[level_name]["border"],
+            border_style=str(style["border"]),
             padding=(1, 2),
         )
     )
 
 
-log = logger.bind(module=__name__)
+log: Logger = logger.bind(module=__name__)
 logger.disable("rich_color_ext")
 
 
-def get_logger():
+def get_logger() -> Any:
     """Get the configured loguru logger."""
     return log
 
@@ -95,6 +103,7 @@ def install_rich_sink(level: str = "DEBUG") -> int:
 
 
 if __name__ == "__main__":
+    logger.remove()
     install_rich_sink()
     log.debug("This is a debug message.")
     log.info("This is an info message.")

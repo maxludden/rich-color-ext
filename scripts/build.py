@@ -16,14 +16,14 @@ WHITE = Style.parse("bold white")
 try:
     if dist.exists():
         STYLE = Style.parse("bold #00aa00")
-        MSG: Text = Text.assemble(*[
+        MSG: Text = Text.assemble(
+            *[
                 Text("See the '", style=GREY, end=""),
                 Text("dist", style=WHITE, end=""),
                 Text("' directory: ", style=GREY, end="\n"),
-                Text(f"{dist.resolve()}", style=GREY)
-
+                Text(f"{dist.resolve()}", style=GREY),
             ],
-            justify="center"
+            justify="center",
         )
         SUBTITLE = Text("Build finished!", style=STYLE)
         console.print(
@@ -36,7 +36,7 @@ try:
                 subtitle=SUBTITLE,
                 subtitle_align="right",
             ),
-            justify="center"
+            justify="center",
         )
     else:
         STYLE = Style.parse("bold #aa0000")
@@ -44,7 +44,7 @@ try:
             *[
                 Text("No '", style=GREY, end=""),
                 Text("dist", style=WHITE, end=""),
-                Text("' directory found.", style=GREY)
+                Text("' directory found.", style=GREY),
             ]
         )
         SUBTITLE = Text("Build failed!", style=STYLE)

@@ -20,14 +20,14 @@ log.disable("rich_color_ext")
 CSS_MAP = get_css_map()
 
 __all__ = [
+    "CSSColor",
+    "__version__",
+    "get_css_map",
     "install",
     "is_installed",
-    "uninstall",
     "rce_install",
     "rce_uninstall",
-    "CSSColor",
-    "get_css_map",
-    "__version__",
+    "uninstall",
 ]
 
 

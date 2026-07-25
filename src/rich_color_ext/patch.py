@@ -56,7 +56,7 @@ def _patched_parse(color: str = "") -> Color:
 def install() -> None:
     """
     Install the monkey patch. After this call, rich.color.Color.parse will
-    support 3‐digit hex and CSS colour names. Safe to call multiple times.
+    support 3-digit hex and CSS colour names. Safe to call multiple times.
     """
     global INSTALLED  # pylint: disable=global-statement
     if INSTALLED:
@@ -80,5 +80,5 @@ def uninstall() -> None:
     global INSTALLED  # pylint: disable=global-statement
     if not INSTALLED:
         return
-    Color.parse = _ORIGINAL_PARSE  # type: ignore[assignment]
+    Color.parse = _ORIGINAL_PARSE  # type: ignore[method-assign]
     INSTALLED = False

@@ -8,5 +8,10 @@
         "aabbcc",
         "definitelynotacolor",
         "pythonpath"
-    ]
+    ],
+    "markdownlint.config": {
+        "MD033": {
+            "allowed_elements": ["p", "img", "a", "br", "span", "div", "code", "h1", "hr"]
+        }
+    }
 }

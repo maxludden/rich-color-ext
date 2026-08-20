@@ -1,9 +1,11 @@
 # rich_color_ext/_hex_utils.py
-"""
+"""rich-color-ext.hex_utils.py
+
 Helpers for handling hex color codes.
+
 """
 
-__all__ = ["expand_3digit_hex", "is_3digit_hex", "is_dark", "is_light"]
+__all__: list[str] = ["expand_3digit_hex", "is_3digit_hex", "is_dark", "is_light"]
 
 
 def expand_3digit_hex(hex3: str) -> str:
@@ -20,14 +22,16 @@ def expand_3digit_hex(hex3: str) -> str:
     Raises:
         ValueError: If input is not a valid 3-digit hex representation.
     """
-    hex_str = hex3.strip()
+    hex_str: str = hex3.strip()
     if hex_str.startswith("#"):
         hex_str = hex_str[1:]
     if len(hex_str) != 3:
         raise ValueError(f"Invalid 3-digit hex colour: {hex3!r}")
     if any(c not in "0123456789abcdefABCDEF" for c in hex_str):
         raise ValueError(f"Invalid hex digit in {hex3!r}")
-    red, green, blue = hex_str[0], hex_str[1], hex_str[2]
+    red: str = hex_str[0]
+    green: str = hex_str[1]
+    blue: str = hex_str[2]
     return f"#{red}{red}{green}{green}{blue}{blue}"
 
 
@@ -59,9 +63,10 @@ def is_dark(hex_str: str) -> bool:
     hex_str = hex_str.lstrip("#")
     if len(hex_str) != 6:
         raise ValueError(f"Invalid hex colour: {hex_str!r}")
-    r = int(hex_str[0:2], 16)
-    g = int(hex_str[2:4], 16)
-    b = int(hex_str[4:6], 16)
+    r = int(hex_str[0:2], base=16)
+    g = int(hex_str[2:4], base=16)
+    b = int(hex_str[4:6], base=16)
+
     # Calculate luminance using the Rec. 709 formula
     luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
     return luminance < 128

@@ -1,6 +1,8 @@
 # rich_color_ext/patch.py
-"""
+"""rich-color-ext.patch.py
+
 Monkey-patching support for rich.color.Color.parse.
+
 """
 
 # from typing import Callable, Type, TypeAlias
@@ -13,7 +15,6 @@ from rich_color_ext.hex_utils import expand_3digit_hex, is_3digit_hex
 
 _Color: TypeAlias = Color
 
-# Preserve original parser so that our patched parser can delegate to it
 _ORIGINAL_PARSE = Color.parse
 
 INSTALLED: bool = False
@@ -34,22 +35,22 @@ def _patched_parse(color: str = "") -> Color:
     Raises:
         ColorParseError: If the parse fails in both our extensions and the original parse.
     """
-    color_str = color.strip().lower()  # Normalize case and whitespace
+    color_str: str = color.strip().lower()  # Normalize case and whitespace
 
-    if is_3digit_hex(color_str):
+    if is_3digit_hex(string=color_str):
         try:
-            hex6 = expand_3digit_hex(color_str)
+            hex6: str = expand_3digit_hex(hex3=color_str)
         except ValueError:
-            # fall through to original
-            return _ORIGINAL_PARSE(color)
+            return _ORIGINAL_PARSE(color)  # fall through to original
         return _ORIGINAL_PARSE(hex6)
+
     # Handle CSS colour names
-    css_map = get_css_map()
+    css_map: dict[str, str] = get_css_map()
     if color_str in css_map:
         hex6 = css_map[color_str]
         return _ORIGINAL_PARSE(hex6)
-    # fallback to original
-    return _ORIGINAL_PARSE(color)
+
+    return _ORIGINAL_PARSE(color)  # fallback to original
 
 
 def install() -> None:

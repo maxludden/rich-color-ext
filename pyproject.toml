@@ -18,7 +18,7 @@ classifiers = [
 ]
 keywords = ["rich", "color", "css", "hex", "3-digit hex", "color names"]
 dependencies = [
-    "rich>=14.0.0",
+    "rich>=15.0.0",
 ]
 
 [build-system]

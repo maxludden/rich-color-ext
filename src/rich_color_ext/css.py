@@ -1,4 +1,6 @@
-"""CSS color utilities and rich renderables.
+"""rich-color-ext.css.py
+
+CSS color utilities and rich renderables.
 
 This module provides a small convenience wrapper, :class:`CSSColor`, for
 working with CSS color names and their hex/RGB representations, along with
@@ -15,7 +17,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-__all__ = ["CSSColor", "CSSColors", "get_css_map"]
+__all__: list[str] = ["CSSColor", "CSSColors", "get_css_map"]
 
 
 # Console is only required for the demonstration block at module run-time.

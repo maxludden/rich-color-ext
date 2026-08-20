@@ -279,7 +279,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    Getting Started
   
 
     
@@ -370,28 +370,6 @@
     <span class="md-ellipsis">
       
         Basic usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#logging-troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Logging / Troubleshooting
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#packaging-notes-pyinstaller" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Packaging notes (PyInstaller)
       
     </span>
   </a>
@@ -593,34 +571,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reference/cli_logger/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    CLI & Logger
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -686,21 +636,21 @@
   <h1>Usage</h1>
 
 <div class="admonition note">
-<p class="admonition-title">Applies to v0.1.9</p>
+<p class="admonition-title">Applies to v2.0.0</p>
 <p>The steps below describe the behaviour shipped with <code>rich-color-ext</code>
 <strong>v0.1.9</strong>. If you are on an older release, upgrade with <code>uv pip
 install --upgrade rich-color-ext</code> before following along.</p>
 </div>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
-<p>Install using <code>uv</code>/<code>uv pip</code> (recommended):
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># via uv directly</span>
+<p>Install using <code>uv</code>/<code>uv pip</code> (recommended):</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># via uv directly</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>add<span class="w"> </span>rich-color-ext
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># or via pip through uv</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rich-color-ext
-</span></code></pre></div></p>
+</span></code></pre></div>
 <p>Install from PyPI:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>rich-color-ext
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>rich-color-ext
 </span></code></pre></div>
 <h2 id="basic-usage">Basic usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
 <p>To enable the extended parsing behaviour, import and call <code>install()</code> once at
@@ -711,22 +661,12 @@ startup in your program.</p>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">install</span><span class="p">()</span>  <span class="c1"># Patch Rich&#39;s Color.parse method</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/].&quot;</span><span class="p">)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s2">&quot;This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/].&quot;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">)</span>
 </span></code></pre></div>
 <p>The package also provides <code>CSSColor</code> helpers and a <code>get_css_map()</code> function to
 inspect the canonical list of supported CSS named colours.</p>
-<h2 id="logging-troubleshooting">Logging / Troubleshooting<a class="headerlink" href="#logging-troubleshooting" title="Permanent link">&para;</a></h2>
-<p>The package uses <code>loguru</code> internally but keeps the logger disabled by default.
-Enable it at runtime to see diagnostic information:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">log</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">log</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;rich_color_ext&quot;</span><span class="p">)</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># ... do things that exercise the library ...</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">log</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="s2">&quot;rich_color_ext&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<h2 id="packaging-notes-pyinstaller">Packaging notes (PyInstaller)<a class="headerlink" href="#packaging-notes-pyinstaller" title="Permanent link">&para;</a></h2>
-<p>The CSS map is embedded in the package so a separate <code>colors.json</code> is usually
-not required. See the README for legacy packaging tips if you need to include
-the JSON resource manually.</p>
 
 
 

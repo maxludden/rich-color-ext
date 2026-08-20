@@ -63,9 +63,9 @@ console.print(
 )
 ```
 
-![example](example.svg)
+![example](docs/img/example.svg)
 
-## Logging
+<!-- ## Logging
 
 This package uses `loguru` for internal, developer-focused logging. By default the
 logger is disabled so importing the package is quiet during normal usage. If you
@@ -133,7 +133,7 @@ Usage:
 
 ```shell
 ./scripts/pyinstaller_build.sh [path/to/your_entry_script.py]  # src/rich_color_ext/cli.py
-```
+``` -->
 
 <p style="text-align:center;">
     <a href="https://github.com/maxludden/rich-color-ext"><code>rich-color-ext</code> by Max Ludden</a>

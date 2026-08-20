@@ -7,7 +7,7 @@ site_author: Max Ludden
 site_dir: site
 
 nav:
-  - Home: index.md
+  - Getting Started: index.md
   - Usage: usage.md
   - Reference:
       - Package: reference/index.md
@@ -15,7 +15,6 @@ nav:
       - Modules: reference/modules.md
       - Patch module: reference/patch.md
       - Hex utils: reference/hex_utils.md
-      - CLI & Logger: reference/cli_logger.md
   - Contact: contact.md
 
 theme:

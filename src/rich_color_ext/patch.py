@@ -11,7 +11,6 @@ from rich.color import Color
 from rich_color_ext.css import get_css_map
 from rich_color_ext.hex_utils import expand_3digit_hex, is_3digit_hex
 
-# _ORIGINAL_PARSE: Callable[[Type[Color], str], Color] = Color.parse # type: ignore
 _Color: TypeAlias = Color
 
 # Preserve original parser so that our patched parser can delegate to it
@@ -61,7 +60,7 @@ def install() -> None:
     global INSTALLED  # pylint: disable=global-statement
     if INSTALLED:
         return
-    Color.parse = _patched_parse  # type: ignore[assignment]
+    setattr(Color, "parse", _patched_parse)
     INSTALLED = True
 
 
@@ -80,5 +79,5 @@ def uninstall() -> None:
     global INSTALLED  # pylint: disable=global-statement
     if not INSTALLED:
         return
-    Color.parse = _ORIGINAL_PARSE  # type: ignore[method-assign]
+    setattr(Color, "parse", _ORIGINAL_PARSE)
     INSTALLED = False

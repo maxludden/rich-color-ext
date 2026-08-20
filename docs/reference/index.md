@@ -1,7 +1,3 @@
----
-title: Reference
----
-
 # API Reference
 
 Below are auto-generated API docs for the primary modules in this package.

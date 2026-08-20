@@ -18,13 +18,8 @@ classifiers = [
 ]
 keywords = ["rich", "color", "css", "hex", "3-digit hex", "color names"]
 dependencies = [
-    "loguru>=0.7.3",
     "rich>=14.0.0",
 ]
-
-[project.scripts]
-rich-color-ext = "rich_color_ext.cli:main"
-rich-color = "rich_color_ext.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -67,14 +62,13 @@ select = [
 ]
 ignore = [
     "E501", # line length is enforced by the formatter, not worth double-policing
+    "B010",   # assert statements are fine in tests
 ]
 
 [tool.ruff.lint.isort]
 known-first-party = ["rich_color_ext"]
 
 [tool.ruff.lint.per-file-ignores]
-# Tests legitimately use assert, subprocess, etc. — bandit-style checks aren't
-# meaningful there.
 "tests/*" = ["S"]
 
 [tool.ruff.format]
@@ -97,10 +91,6 @@ module = "loguru.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-# Test suite is exercised by pytest, not consumed as a typed API surface —
-# don't force full strict annotations on every helper/test function.
 module = "tests.*"
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
-
-[tool.my

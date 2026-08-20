@@ -15,13 +15,10 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from rich_color_ext.logger import log
-
 __all__ = ["CSSColor", "CSSColors", "get_css_map"]
 
+
 # Console is only required for the demonstration block at module run-time.
-
-
 @lru_cache(maxsize=1024)
 def get_css_map() -> dict[str, str]:
     """
@@ -238,7 +235,7 @@ class CSSColor:
         You may provide any combination of name/hex/RGB sufficient to derive the
         remaining attributes. Values are normalized and validated.
         """
-        log.debug(f"Creating CSSColor({name=}, {hex=}, {red=}, {green=}, {blue=})")
+        # log.debug(f"Creating CSSColor({name=}, {hex=}, {red=}, {green=}, {blue=})")
 
         self._name = ""
         self._hex = ""
@@ -288,7 +285,7 @@ class CSSColor:
             raise ValueError("Name must be a non-empty string.")
         css_map = css_map or get_css_map()
         norm = _normalize_name(name)
-        log.debug(f"Creating CSSColor from name: name={norm!r}")
+        # log.debug(f"Creating CSSColor from name: name={norm!r}")
         hex_value = css_map.get(norm)
         if not hex_value:
             raise ValueError(f"Unknown color name: {name}")
@@ -345,11 +342,11 @@ class CSSColor:
         Returns:
             Tuple[int, int, int]: The RGB components.
         """
-        log.debug(f"Converting hex to RGB: hex_str={hex_str!r}")
+        # log.debug(f"Converting hex to RGB: hex_str={hex_str!r}")
         norm = _normalize_hex(hex_str)
         val = norm.lstrip("#")
         red, green, blue = (int(val[i : i + 2], 16) for i in (0, 2, 4))
-        log.debug(f"Converted hex {norm} to RGB: red={red}, green={green}, blue={blue}")
+        # log.debug(f"Converted hex {norm} to RGB: red={red}, green={green}, blue={blue}")
         return (red, green, blue)
 
     @property
@@ -360,26 +357,26 @@ class CSSColor:
     @name.setter
     def name(self, value: str) -> None:
         """Set the name of the color."""
-        log.debug(f"Setting name to: {value!r}")
+        # log.debug(f"Setting name to: {value!r}")
         self._name = _normalize_name(value)
         if self._name in get_css_map() and not self._hex:
             self.hex = get_css_map()[self._name]
-            log.debug(f"Set hex from name: {self.hex=}")
+            # log.debug(f"Set hex from name: {self.hex=}")
         if self._hex and any(v < 0 for v in (self._red, self._green, self._blue)):
             red, green, blue = self.hex_to_rgb(self._hex)
             self._red, self._green, self._blue = red, green, blue
-            log.debug(f"Set RGB from hex: {self._red=}, {self._green=}, {self._blue=}")
+            # log.debug(f"Set RGB from hex: {self._red=}, {self._green=}, {self._blue=}")
 
     @property
     def hex(self) -> str:
         """Return the hex representation of the color."""
-        log.debug(f"Getting hex: {self._hex=}")
+        # log.debug(f"Getting hex: {self._hex=}")
         return self._hex
 
     @hex.setter
     def hex(self, value: str) -> None:
         """Set the hex representation of the color."""
-        log.debug(f"Setting hex to: {value!r}")
+        # log.debug(f"Setting hex to: {value!r}")
         self._hex = _normalize_hex(value)
         if any(v < 0 for v in (self._red, self._green, self._blue)):
             red, green, blue = self.hex_to_rgb(self._hex)
@@ -393,13 +390,13 @@ class CSSColor:
     @property
     def red(self) -> int:
         """Return the red component of the color."""
-        log.debug(f"Getting red: {self._red=}")
+        # log.debug(f"Getting red: {self._red=}")
         return self._red
 
     @red.setter
     def red(self, value: int) -> None:
         """Set the red component of the color."""
-        log.debug(f"Setting red to: {value}")
+        # log.debug(f"Setting red to: {value}")
         if 0 <= value <= 255:
             self._red = value
         else:
@@ -416,13 +413,13 @@ class CSSColor:
     @property
     def green(self) -> int:
         """Return the green component of the color."""
-        log.debug(f"Getting green: {self._green=}")
+        # log.debug(f"Getting green: {self._green=}")
         return self._green
 
     @green.setter
     def green(self, value: int) -> None:
         """Set the green component of the color."""
-        log.debug(f"Setting green to: {value}")
+        # log.debug(f"Setting green to: {value}")
         if 0 <= value <= 255:
             self._green = value
         else:
@@ -439,13 +436,13 @@ class CSSColor:
     @property
     def blue(self) -> int:
         """Return the blue component of the color."""
-        log.debug(f"Getting blue: {self._blue=}")
+        # log.debug(f"Getting blue: {self._blue=}")
         return self._blue
 
     @blue.setter
     def blue(self, value: int) -> None:
         """Set the blue component of the color."""
-        log.debug(f"Setting blue to: {value}")
+        # log.debug(f"Setting blue to: {value}")
         if 0 <= value <= 255:
             self._blue = value
         else:

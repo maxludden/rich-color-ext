@@ -2,15 +2,14 @@
 name = "rich-color-ext"
 description = "Extend Rich with the ability to parse CSS color names and 3-digit hex colors."
 readme = "README.md"
-authors = [{ name = "Max Ludden", email = "dev@maxludden.com" }]
-requires-python = ">=3.10"
+authors = [{ name = "Max Ludden", email = "maxludden@me.com" }]
+requires-python = ">=3.11"
 dynamic = ["version"]
 license = { text = "MIT" }
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",

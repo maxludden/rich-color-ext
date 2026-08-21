@@ -20,3 +20,4 @@ codebook.toml
 
 # Local agent settings (machine-specific, not shared)
 .claude/
+uv-workspace-metadata.json

@@ -3,10 +3,19 @@ title: Usage
 CSS: styles/extra.css,
 ---
 
-!!! note "Applies to v2.0.0"
+!!! note "Applies to v3.0.0"
     The steps below describe the behaviour shipped with `rich-color-ext`
-    **v0.1.9**. If you are on an older release, upgrade with `uv pip
+    **v3.0.0**. If you are on an older release, upgrade with `uv pip
     install --upgrade rich-color-ext` before following along.
+
+!!! warning "Breaking change in v3.0.0"
+    Rich's parser now runs **first**; CSS names and 3-digit hex are only a fallback
+    for colors Rich rejects. Names Rich already knows (`red`, `green`, `white`,
+    `orchid`, ...) keep Rich's own color instead of the CSS truecolor value, and
+    3-digit hex requires the leading `#` (`#09f`, not `09f`). The import-time
+    `CSS_MAP` constant was removed; use `get_css_map()`. See
+    [How to Upgrade to v3.0.0](upgrade-to-v3.md) and the
+    [changelog](https://github.com/maxludden/rich-color-ext/blob/main/CHANGELOG.md).
 
 ## Installing
 
@@ -42,6 +51,43 @@ console.print(
     "This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/]."
 )
 ```
+
+## How parsing works
+
+1. `Color.parse(text)` calls Rich's original parser.
+2. If Rich raises `ColorParseError`, `#abc`-style hex is expanded to `#aabbcc`, or
+   the text is looked up (case-insensitively) in the CSS color map.
+3. Anything else re-raises Rich's original `ColorParseError`.
+
+Results are cached with `functools.lru_cache`. Call `uninstall()` to restore Rich's
+original `Color.parse`.
+
+## Install, uninstall and thread safety
+
+```python
+from rich_color_ext import get_css_map, install, is_installed, uninstall
+
+install()  # idempotent
+assert is_installed()
+get_css_map()["rebeccapurple"]  # '#663399'
+uninstall()  # restores Rich's original Color.parse exactly
+```
+
+- `install()` and `uninstall()` are serialised with a lock, so they are safe to call
+  from several threads. `is_installed()` inspects `Color.parse` itself rather than a
+  separate flag. Parsing needs no lock.
+- The patch is a `staticmethod`, so `Color.parse(...)` also works on a `Color` instance.
+- Importing the package has **no side effects**: nothing is patched until you call
+  `install()`, and display-only Rich modules (`Panel`, `Table`, `Columns`) are
+  imported lazily.
+
+## Migrating from v2
+
+| v2 | v3 |
+| --- | --- |
+| `Color.parse("red")` → CSS truecolor `#ff0000` | Rich's ANSI `red` (Rich wins) |
+| `Color.parse("09f")` → `#0099ff` | `ColorParseError`; use `#09f` |
+| `from rich_color_ext import CSS_MAP` | `from rich_color_ext import get_css_map` |
 
 The package also provides `CSSColor` helpers and a `get_css_map()` function to
 inspect the canonical list of supported CSS named colours.

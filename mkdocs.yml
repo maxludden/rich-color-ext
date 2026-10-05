@@ -9,6 +9,7 @@ site_dir: site
 nav:
   - Getting Started: index.md
   - Usage: usage.md
+  - Upgrade to v3.0.0: upgrade-to-v3.md
   - Reference:
       - Package: reference/index.md
       - CSS module: reference/css.md

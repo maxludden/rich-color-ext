@@ -9,13 +9,13 @@ helpers to iterate all known colors. Data comes from ``_css_colors.get_css_map``
 
 from collections.abc import Generator
 from functools import lru_cache
+from typing import TYPE_CHECKING
 
-from rich.align import Align
 from rich.color_triplet import ColorTriplet
-from rich.columns import Columns
-from rich.panel import Panel
-from rich.table import Table
 from rich.text import Text
+
+if TYPE_CHECKING:
+    from rich.panel import Panel
 
 __all__: list[str] = ["CSSColor", "CSSColors", "get_css_map"]
 
@@ -501,8 +501,13 @@ class CSSColor:
         )
         return rgb
 
-    def panel(self) -> Panel:
-        """Return a Rich Table representation of the color."""
+    def panel(self) -> "Panel":
+        """Return a Rich Panel showing the color's hex and RGB values."""
+        # Imported lazily: only needed for display, keeps ``import rich_color_ext`` light.
+        from rich.align import Align  # pylint: disable=C0415
+        from rich.panel import Panel  # pylint: disable=C0415,W0621
+        from rich.table import Table  # pylint: disable=C0415
+
         table = Table(
             show_header=False,
             show_edge=False,
@@ -580,6 +585,7 @@ class CSSColors(dict[str, CSSColor]):
 
 
 if __name__ == "__main__":  # pragma: no cover
+    from rich.columns import Columns
     from rich.console import Console  # pylint:disable=C0412
 
     css_colors = CSSColors()

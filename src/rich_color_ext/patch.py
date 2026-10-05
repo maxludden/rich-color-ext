@@ -1,84 +1,87 @@
 # rich_color_ext/patch.py
 """rich-color-ext.patch.py
 
-Monkey-patching support for rich.color.Color.parse.
+Monkey-patching support for ``rich.color.Color.parse``.
 
+The patched parser always tries Rich's own parser first and only falls back to
+3-digit hex (``#abc``) and CSS color names when Rich rejects the input. Colors
+Rich already understands (including ANSI names such as ``red``) are therefore
+unchanged.
 """
 
-# from typing import Callable, Type, TypeAlias
-from typing import TypeAlias
+import threading
+from functools import lru_cache
 
-from rich.color import Color
+from rich.color import Color, ColorParseError
 
 from rich_color_ext.css import get_css_map
 from rich_color_ext.hex_utils import expand_3digit_hex, is_3digit_hex
 
-_Color: TypeAlias = Color
-
+# Rich's ``parse`` as a callable (bound classmethod) and as the raw class attribute.
+# The raw attribute is kept so ``uninstall`` restores ``Color.parse`` exactly.
 _ORIGINAL_PARSE = Color.parse
+_ORIGINAL_PARSE_ATTR = Color.__dict__["parse"]
 
-INSTALLED: bool = False
+# Serialises install()/uninstall(); _patched_parse itself is pure and needs no lock.
+_LOCK = threading.Lock()
+
+__all__: list[str] = ["install", "is_installed", "uninstall"]
 
 
+@lru_cache(maxsize=1024)
 def _patched_parse(color: str = "") -> Color:
     """
-    Replacement for RichColor.parse() that adds support for 3-digit hex codes (#ABC)
-    and CSS color names (e.g. 'aliceblue').
+    Replacement for ``Color.parse`` that adds 3-digit hex and CSS color name support.
+
+    Rich's parser is tried first; the extensions are only consulted if it raises
+    :class:`~rich.color.ColorParseError`. Results are cached, like Rich's own.
 
     Args:
-        cls: The Color class (should be rich.color.Color).
-        color: The color string to parse.
+        color: The color string to parse (case- and whitespace-insensitive).
 
     Returns:
-        A rich Color instance.
+        A :class:`rich.color.Color` instance.
 
     Raises:
-        ColorParseError: If the parse fails in both our extensions and the original parse.
+        ColorParseError: If neither Rich nor the extensions can parse ``color``.
     """
-    color_str: str = color.strip().lower()  # Normalize case and whitespace
-
-    if is_3digit_hex(string=color_str):
-        try:
-            hex6: str = expand_3digit_hex(hex3=color_str)
-        except ValueError:
-            return _ORIGINAL_PARSE(color)  # fall through to original
-        return _ORIGINAL_PARSE(hex6)
-
-    # Handle CSS colour names
-    css_map: dict[str, str] = get_css_map()
-    if color_str in css_map:
-        hex6 = css_map[color_str]
-        return _ORIGINAL_PARSE(hex6)
-
-    return _ORIGINAL_PARSE(color)  # fallback to original
+    try:
+        return _ORIGINAL_PARSE(color)
+    except ColorParseError:
+        color_str: str = color.strip().lower()
+        if is_3digit_hex(color_str):
+            return _ORIGINAL_PARSE(expand_3digit_hex(color_str))
+        hex6 = get_css_map().get(color_str)
+        if hex6 is not None:
+            return _ORIGINAL_PARSE(hex6)
+        raise
 
 
 def install() -> None:
     """
-    Install the monkey patch. After this call, rich.color.Color.parse will
-    support 3-digit hex and CSS colour names. Safe to call multiple times.
+    Install the monkey patch. After this call, ``rich.color.Color.parse`` also
+    accepts 3-digit hex (``#abc``) and CSS color names. Safe to call multiple times.
     """
-    global INSTALLED  # pylint: disable=global-statement
-    if INSTALLED:
-        return
-    setattr(Color, "parse", _patched_parse)
-    INSTALLED = True
+    with _LOCK:
+        if is_installed():
+            return
+        # staticmethod so the patch also works when called on a Color instance.
+        setattr(Color, "parse", staticmethod(_patched_parse))
 
 
 def is_installed() -> bool:
     """
     Return True if the monkey patch is currently installed.
     """
-    return INSTALLED
+    return Color.__dict__["parse"] is not _ORIGINAL_PARSE_ATTR
 
 
 def uninstall() -> None:
     """
-    Uninstall the monkey patch, restoring the original rich.color.Color.parse.
+    Uninstall the monkey patch, restoring the original ``rich.color.Color.parse``.
     Safe to call multiple times.
     """
-    global INSTALLED  # pylint: disable=global-statement
-    if not INSTALLED:
-        return
-    setattr(Color, "parse", _ORIGINAL_PARSE)
-    INSTALLED = False
+    with _LOCK:
+        if not is_installed():
+            return
+        setattr(Color, "parse", _ORIGINAL_PARSE_ATTR)

@@ -42,7 +42,7 @@
 
     <defs>
     <clipPath id="terminal-144848004-clip-terminal">
-      <rect x="0" y="0" width="779.8" height="291.79999999999995" />
+        <rect x="0" y="0" width="779.8" height="291.79999999999995" />
     </clipPath>
     <clipPath id="terminal-144848004-line-0">
     <rect x="0" y="1.5" width="780.8" height="24.65"/>

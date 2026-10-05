@@ -1,4 +1,4 @@
-# rich_color_ext/_hex_utils.py
+# rich_color_ext/hex_utils.py
 """rich-color-ext.hex_utils.py
 
 Helpers for handling hex color codes.
@@ -10,25 +10,22 @@ __all__: list[str] = ["expand_3digit_hex", "is_3digit_hex", "is_dark", "is_light
 
 def expand_3digit_hex(hex3: str) -> str:
     """
-    Expand a 3-digit hex string (e.g. '#ABC' or 'ABC') into a 6-digit with leading '#',
+    Expand a 3-digit hex string with a leading '#' (e.g. '#ABC') into 6 digits,
     e.g. '#AABBCC'.
 
     Args:
-        hex3: The 3-digit hex string including or excluding the '#'.
+        hex3: The 3-digit hex string, including the leading '#'.
 
     Returns:
         A string of format '#RRGGBB'.
 
     Raises:
-        ValueError: If input is not a valid 3-digit hex representation.
+        ValueError: If input is not a valid '#'-prefixed 3-digit hex representation.
     """
     hex_str: str = hex3.strip()
-    if hex_str.startswith("#"):
-        hex_str = hex_str[1:]
-    if len(hex_str) != 3:
+    if not is_3digit_hex(hex_str):
         raise ValueError(f"Invalid 3-digit hex colour: {hex3!r}")
-    if any(c not in "0123456789abcdefABCDEF" for c in hex_str):
-        raise ValueError(f"Invalid hex digit in {hex3!r}")
+    hex_str = hex_str[1:]
     red: str = hex_str[0]
     green: str = hex_str[1]
     blue: str = hex_str[2]
@@ -37,7 +34,8 @@ def expand_3digit_hex(hex3: str) -> str:
 
 def is_3digit_hex(string: str) -> bool:
     """
-    Test whether a string is a 3-digit hex colour code (#ABC or ABC) case-insensitive.
+    Test whether a string is a '#'-prefixed 3-digit hex colour code (e.g. '#ABC'),
+    case-insensitive. Bare words such as 'bad' or 'add' are not hex colours.
 
     Args:
         string: input string.
@@ -46,9 +44,11 @@ def is_3digit_hex(string: str) -> bool:
         True if matches 3-digit hex format.
     """
     hex_str = string.strip()
-    if hex_str.startswith("#"):
-        hex_str = hex_str[1:]
-    return len(hex_str) == 3 and all(c in "0123456789abcdefABCDEF" for c in hex_str)
+    return (
+        len(hex_str) == 4
+        and hex_str[0] == "#"
+        and all(c in "0123456789abcdefABCDEF" for c in hex_str[1:])
+    )
 
 
 def is_dark(hex_str: str) -> bool:

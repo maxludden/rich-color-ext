@@ -55,3 +55,19 @@ def test_import_safe_when_find_spec_returns_none(monkeypatch):
     mod = _reimport_package()
     assert mod is not None
     assert not called, "subprocess.check_call was invoked during import"
+
+
+def test_import_is_lightweight_and_does_not_patch():
+    """A fresh import leaves Color.parse alone and avoids display-only Rich modules (panel, table, columns)."""
+    code = """
+import sys
+from rich.color import Color
+orig = Color.__dict__["parse"]
+import rich_color_ext
+assert Color.__dict__["parse"] is orig
+assert not rich_color_ext.is_installed()
+assert not hasattr(rich_color_ext, "CSS_MAP")
+for m in ("rich.panel", "rich.table", "rich.columns"):
+    assert m not in sys.modules, m
+"""
+    subprocess.run([sys.executable, "-c", code], check=True)

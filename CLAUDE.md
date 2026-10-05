@@ -19,7 +19,7 @@ Use `uv` for everything.
 
 ## Architecture
 
-- **`patch.py`** is the core: `install()` sets `Color.parse` to `staticmethod(_patched_parse)` (so instance calls work). `_patched_parse` is `lru_cache`d and is **Rich-first**: it calls Rich's original parse and only on `ColorParseError` tries `#abc` hex expansion and the CSS name map, otherwise re-raising. `uninstall()` restores Rich's original classmethod object. Both are idempotent and serialised by a module-level lock; `is_installed()` inspects `Color.__dict__["parse"]` (no flag).
+- **`patch.py`** is the core: `install()` sets `Color.parse` to `classmethod(_patched_parse)` (like Rich: instance calls work and subclasses get their own type back). `_patched_parse` is `lru_cache`d and is **Rich-first**: it calls Rich's original parse function with the receiving `cls` and only on `ColorParseError` tries `#abc` hex expansion and the CSS name map, otherwise re-raising. `uninstall()` restores Rich's original classmethod object. Both are idempotent and serialised by a module-level lock; `is_installed()` inspects `Color.__dict__["parse"]` (no flag).
 - **`css.py`** owns `get_css_map()`, the CSS4 name → hex lookup, embedded in the package, plus the `CSSColor`/`CSSColors` helpers.
 - **`hex_utils.py`** has `is_3digit_hex()` / `expand_3digit_hex()` (both require the leading `#`), plus `is_dark`/`is_light`.
 - The CLI and loguru logger were removed in v2.0.0; don't reintroduce them.

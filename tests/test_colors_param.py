@@ -27,7 +27,7 @@ def _color_cases() -> Iterable[tuple[str, str]]:
 @pytest.mark.parametrize("name,hex_value", _color_cases())
 def test_parse_color(name: str, hex_value: str) -> None:
     """Test parsing of CSS color names to RGB values."""
-    color = _patched_parse(name)
+    color = _patched_parse(Color, name)
     if _rich_knows(name):
         assert color == Color.parse(name)
         return

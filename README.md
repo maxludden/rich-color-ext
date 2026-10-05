@@ -100,7 +100,7 @@ uninstall()  # restores Rich's original Color.parse exactly
 
 - Importing `rich_color_ext` has no side effects: nothing is patched until you call `install()`, and the display-only Rich modules (`Panel`, `Table`, `Columns`) are loaded lazily.
 - `install()` / `uninstall()` are serialised with a lock, and `is_installed()` inspects `Color.parse` itself.
-- The patch is installed as a `staticmethod`, so `Color.parse(...)` also works when called on a `Color` instance.
+- The patch is installed as a `classmethod`, like Rich's own, so `Color.parse(...)` works on a `Color` instance and `MyColor.parse(...)` on a `Color` subclass returns a `MyColor`.
 
 ### Migrating from v2
 

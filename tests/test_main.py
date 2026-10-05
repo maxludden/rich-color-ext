@@ -89,11 +89,13 @@ def test_rich_names_keep_rich_behaviour():
 
 def test_parse_is_cached():
     """The patched parser is memoised like Rich's."""
+    from rich.color import Color
+
     from rich_color_ext.patch import _patched_parse
 
     _patched_parse.cache_clear()
-    _patched_parse("#abc")
-    _patched_parse("#abc")
+    _patched_parse(Color, "#abc")
+    _patched_parse(Color, "#abc")
     assert _patched_parse.cache_info().hits == 1
 
 
@@ -119,11 +121,29 @@ def test_uninstall_leaves_foreign_patch_untouched():
 
     uninstall()
     install()
-    foreign = staticmethod(lambda color: Color.from_rgb(1, 2, 3))
+    foreign = classmethod(lambda cls, color: cls.from_rgb(1, 2, 3))
     setattr(Color, "parse", foreign)
     try:
         uninstall()
         assert Color.__dict__["parse"] is foreign
     finally:
         setattr(Color, "parse", _ORIGINAL_PARSE_ATTR)
+        uninstall()
+
+
+def test_subclass_parse_returns_subclass():
+    from rich.color import Color
+
+    from rich_color_ext import install, uninstall
+
+    class MyColor(Color):
+        pass
+
+    install()
+    try:
+        for text in ("red", "#abc", "rebeccapurple"):
+            assert type(MyColor.parse(text)) is MyColor
+            assert type(Color.parse(text)) is Color
+        assert type(Color.parse("red").parse("#abc")) is Color
+    finally:
         uninstall()

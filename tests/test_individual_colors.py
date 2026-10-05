@@ -40,7 +40,7 @@ def _unique_hex_cases() -> Iterable[tuple[str, str]]:
 @pytest.mark.parametrize("name,hex_value", _color_cases())
 def test_patched_parse_handles_case_insensitive_names(name: str, hex_value: str) -> None:
     """The patched parser should accept CSS colour names regardless of case."""
-    color = _patched_parse(name.upper())
+    color = _patched_parse(Color, name.upper())
     if _rich_knows(name):
         assert color == Color.parse(name)
         return

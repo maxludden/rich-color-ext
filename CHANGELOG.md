@@ -22,7 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `Color.parse` can be called on a `Color` instance again; the patch is installed as
-  a `staticmethod` (it previously failed with a `TypeError`). `uninstall()` now
+  a `classmethod` (it previously failed with a `TypeError`), and delegates with the
+  receiving class so `MyColor.parse(...)` on a `Color` subclass still returns a
+  `MyColor`, as in Rich. `uninstall()` now
   restores Rich's original `classmethod` object exactly.
 
 ### Changed

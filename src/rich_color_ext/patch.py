@@ -10,17 +10,21 @@ unchanged.
 """
 
 import threading
+from collections.abc import Callable
 from functools import lru_cache
+from typing import Any
 
 from rich.color import Color, ColorParseError
 
 from rich_color_ext.css import get_css_map
 from rich_color_ext.hex_utils import expand_3digit_hex, is_3digit_hex
 
-# Rich's ``parse`` as a callable (bound classmethod) and as the raw class attribute.
-# The raw attribute is kept so ``uninstall`` restores ``Color.parse`` exactly.
-_ORIGINAL_PARSE = Color.parse
+# Rich's raw ``parse`` class attribute (a classmethod). It is kept so ``uninstall``
+# restores ``Color.parse`` exactly, and its ``__func__`` is Rich's cached
+# ``(cls, color)`` implementation, which the patch delegates to so subclasses of
+# ``Color`` get instances of themselves back.
 _ORIGINAL_PARSE_ATTR = Color.__dict__["parse"]
+_ORIGINAL_PARSE_FUNC: Callable[[type[Color], str], Color] = _ORIGINAL_PARSE_ATTR.__func__
 
 # Serialises install()/uninstall(); _patched_parse itself is pure and needs no lock.
 _LOCK = threading.Lock()
@@ -29,36 +33,39 @@ __all__: list[str] = ["install", "is_installed", "uninstall"]
 
 
 @lru_cache(maxsize=1024)
-def _patched_parse(color: str = "") -> Color:
+def _patched_parse(cls: type[Color], color: str = "") -> Color:
     """
     Replacement for ``Color.parse`` that adds 3-digit hex and CSS color name support.
 
     Rich's parser is tried first; the extensions are only consulted if it raises
-    :class:`~rich.color.ColorParseError`. Results are cached, like Rich's own.
+    :class:`~rich.color.ColorParseError`. Results are cached per receiving class,
+    like Rich's own, and are instances of ``cls``.
 
     Args:
+        cls: The class ``parse`` was called on (``Color`` or a subclass).
         color: The color string to parse (case- and whitespace-insensitive).
 
     Returns:
-        A :class:`rich.color.Color` instance.
+        An instance of ``cls``.
 
     Raises:
         ColorParseError: If neither Rich nor the extensions can parse ``color``.
     """
     try:
-        return _ORIGINAL_PARSE(color)
+        return _ORIGINAL_PARSE_FUNC(cls, color)
     except ColorParseError:
         color_str: str = color.strip().lower()
         if is_3digit_hex(color_str):
-            return _ORIGINAL_PARSE(expand_3digit_hex(color_str))
+            return _ORIGINAL_PARSE_FUNC(cls, expand_3digit_hex(color_str))
         hex6 = get_css_map().get(color_str)
         if hex6 is not None:
-            return _ORIGINAL_PARSE(hex6)
+            return _ORIGINAL_PARSE_FUNC(cls, hex6)
         raise
 
 
-# The exact descriptor we install, so ownership is checked by identity.
-_PATCHED_PARSE_ATTR = staticmethod(_patched_parse)
+# The exact descriptor we install, so ownership is checked by identity. A
+# classmethod (like Rich's) so the receiving class is passed through.
+_PATCHED_PARSE_ATTR: Any = classmethod(_patched_parse)  # type: ignore[arg-type]
 
 
 def install() -> None:
@@ -69,7 +76,6 @@ def install() -> None:
     with _LOCK:
         if is_installed():
             return
-        # staticmethod so the patch also works when called on a Color instance.
         setattr(Color, "parse", _PATCHED_PARSE_ATTR)
 
 

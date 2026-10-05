@@ -5,14 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v3.0.0 | 2026-10-04
+
+### Breaking changes
+
+- **Rich-first parsing.** The patched `Color.parse` now always tries Rich's own
+  parser first and only falls back to 3-digit hex and the CSS color map when Rich
+  raises `ColorParseError`. Names Rich already knows (`red`, `green`, `blue`,
+  `white`, `black`, `yellow`, `magenta`, `cyan`, `orchid`, `tan`, `violet`,
+  `purple`, ...) now keep Rich's color (ANSI/256-color) instead of being remapped
+  to the CSS truecolor hex. Previously the CSS map took precedence.
+- **3-digit hex requires `#`.** `is_3digit_hex()` / `expand_3digit_hex()` and the
+  patched parser no longer accept bare `abc`/`09f`, so words like `bad` or `add`
+  are never mistaken for colors. Use `#abc`.
+
+### Fixed
+
+- `Color.parse` can be called on a `Color` instance again; the patch is installed as
+  a `classmethod` (it previously failed with a `TypeError`), and delegates with the
+  receiving class so `MyColor.parse(...)` on a `Color` subclass still returns a
+  `MyColor`, as in Rich. `uninstall()` now
+  restores Rich's original `classmethod` object exactly.
+
+### Changed
+
+- The patched parser is memoised with `functools.lru_cache`, like Rich's own.
+- Docstrings, README and docs updated to match; removed dead code paths.
+- Ruff/mypy target Python 3.11 (matching `requires-python`); removed the unused
+  `loguru` mypy override.
+- `install()`/`uninstall()` are serialised with a `threading.Lock`, and
+  `is_installed()` now inspects `Color.parse` itself; the `INSTALLED` flag was removed.
+- Removed the import-time `CSS_MAP` preload (**breaking** for `from rich_color_ext
+  import CSS_MAP`; use `get_css_map()`), and made the `rich.panel`/`table`/`columns`
+  imports in `css.py` lazy.
+- `uninstall()` only restores Rich's parser if `Color.parse` is still this package's patch; a foreign monkeypatch is left untouched.
+- Added regression tests (instance calls, cache, Rich-first behaviour, bare words).
+
+Includes all changes from v2.0.0 below.
+
 ## v2.0.0 | 2026-08-19
 
 ### Removed Loguru and updated README.md and Docs
 
-- Bumped `rich-color-ext` to version `v2,0,0` and I made some breaking changes:
-- Rmoved the logger and the cli functionality (Not really aligned with the purpose of this library). That also lead to the removal of the their test and mentions in the docs.
-- Removed the `loguru` dependancy, as was not used.
-- Updated peronal logo.
+- Bumped `rich-color-ext` to version `v2.0.0` and I made some breaking changes:
+- Removed the logger and the cli functionality (Not really aligned with the purpose of this library). That also lead to the removal of the their tests and mentions in the docs.
+- Removed the `loguru` dependency, as was not used.
+- Updated personal logo.
 
 ## v0.1.9 | 2025-11-19
 

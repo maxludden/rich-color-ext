@@ -28,11 +28,10 @@ def test_parse_css_name():
 def test_parse_standard():
     """Test that standard color parsing still works."""
     c1 = Color.parse("red")
-    c2 = Color.parse("red")
-    assert c1 == c2
-    # ensure still works with full hex
-    c3 = Color.parse("#FF0000")
-    assert c3 == c1
+    assert c1 == Color.parse("red")
+    # Rich's ANSI "red" is untouched (not remapped to CSS #ff0000)
+    assert c1.name == "red"
+    assert Color.parse("#FF0000").name == "#ff0000"
 
 
 def test_uninstall_patch():
@@ -41,3 +40,110 @@ def test_uninstall_patch():
     assert is_installed()
     uninstall()
     assert not is_installed()
+
+
+def test_parse_on_instance_after_install():
+    """Regression: the patch must not bind the instance as the color argument."""
+    install()
+    try:
+        assert Color.from_rgb(1, 2, 3).parse("#abc") == Color.parse("#aabbcc")
+    finally:
+        uninstall()
+
+
+def test_uninstall_restores_original_classmethod():
+    """Uninstall restores Rich's own classmethod, usable from instances too."""
+    original = Color.__dict__["parse"]
+    install()
+    uninstall()
+    assert Color.__dict__["parse"] is original
+    assert Color.from_rgb(1, 2, 3).parse("red").name == "red"
+
+
+def test_bare_3digit_words_are_not_colors():
+    """Bare hex-looking words must not parse; only '#'-prefixed 3-digit hex does."""
+    import pytest
+    from rich.color import ColorParseError
+
+    install()
+    try:
+        for word in ("bad", "add", "09f", "#abcd"):
+            with pytest.raises(ColorParseError):
+                Color.parse(word)
+        assert Color.parse("#09F") == Color.parse("#0099ff")
+    finally:
+        uninstall()
+
+
+def test_rich_names_keep_rich_behaviour():
+    """Names Rich knows (ANSI) are parsed by Rich first, not remapped to CSS hex."""
+    from rich.color import ColorType
+
+    install()
+    try:
+        assert Color.parse("red").type is ColorType.STANDARD
+        assert Color.parse("rebeccapurple").type is ColorType.TRUECOLOR
+    finally:
+        uninstall()
+
+
+def test_parse_is_cached():
+    """The patched parser is memoised like Rich's."""
+    from rich.color import Color
+
+    from rich_color_ext.patch import _patched_parse
+
+    _patched_parse.cache_clear()
+    _patched_parse(Color, "#abc")
+    _patched_parse(Color, "#abc")
+    assert _patched_parse.cache_info().hits == 1
+
+
+def test_concurrent_install_uninstall_is_consistent():
+    """Hammering install/uninstall from threads never leaves a half-state."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    def work(i: int) -> None:
+        (install if i % 2 else uninstall)()
+
+    with ThreadPoolExecutor(8) as pool:
+        list(pool.map(work, range(200)))
+    uninstall()
+    assert not is_installed()
+    assert Color.parse("red").name == "red"
+
+
+def test_uninstall_leaves_foreign_patch_untouched():
+    from rich.color import Color
+
+    from rich_color_ext import install, uninstall
+    from rich_color_ext.patch import _ORIGINAL_PARSE_ATTR
+
+    uninstall()
+    install()
+    foreign = classmethod(lambda cls, color: cls.from_rgb(1, 2, 3))
+    setattr(Color, "parse", foreign)
+    try:
+        uninstall()
+        assert Color.__dict__["parse"] is foreign
+    finally:
+        setattr(Color, "parse", _ORIGINAL_PARSE_ATTR)
+        uninstall()
+
+
+def test_subclass_parse_returns_subclass():
+    from rich.color import Color
+
+    from rich_color_ext import install, uninstall
+
+    class MyColor(Color):
+        pass
+
+    install()
+    try:
+        for text in ("red", "#abc", "rebeccapurple"):
+            assert type(MyColor.parse(text)) is MyColor
+            assert type(Color.parse(text)) is Color
+        assert type(Color.parse("red").parse("#abc")) is Color
+    finally:
+        uninstall()

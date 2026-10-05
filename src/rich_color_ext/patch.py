@@ -57,6 +57,10 @@ def _patched_parse(color: str = "") -> Color:
         raise
 
 
+# The exact descriptor we install, so ownership is checked by identity.
+_PATCHED_PARSE_ATTR = staticmethod(_patched_parse)
+
+
 def install() -> None:
     """
     Install the monkey patch. After this call, ``rich.color.Color.parse`` also
@@ -66,20 +70,21 @@ def install() -> None:
         if is_installed():
             return
         # staticmethod so the patch also works when called on a Color instance.
-        setattr(Color, "parse", staticmethod(_patched_parse))
+        setattr(Color, "parse", _PATCHED_PARSE_ATTR)
 
 
 def is_installed() -> bool:
     """
     Return True if the monkey patch is currently installed.
     """
-    return Color.__dict__["parse"] is not _ORIGINAL_PARSE_ATTR
+    return Color.__dict__["parse"] is _PATCHED_PARSE_ATTR
 
 
 def uninstall() -> None:
     """
     Uninstall the monkey patch, restoring the original ``rich.color.Color.parse``.
-    Safe to call multiple times.
+    Safe to call multiple times. If another library has replaced ``Color.parse``
+    since ``install()``, that foreign patch is left untouched.
     """
     with _LOCK:
         if not is_installed():

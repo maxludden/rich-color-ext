@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the import-time `CSS_MAP` preload (**breaking** for `from rich_color_ext
   import CSS_MAP`; use `get_css_map()`), and made the `rich.panel`/`table`/`columns`
   imports in `css.py` lazy.
+- `uninstall()` only restores Rich's parser if `Color.parse` is still this package's patch; a foreign monkeypatch is left untouched.
 - Added regression tests (instance calls, cache, Rich-first behaviour, bare words).
 
 Includes all changes from v2.0.0 below.

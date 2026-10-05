@@ -109,3 +109,21 @@ def test_concurrent_install_uninstall_is_consistent():
     uninstall()
     assert not is_installed()
     assert Color.parse("red").name == "red"
+
+
+def test_uninstall_leaves_foreign_patch_untouched():
+    from rich.color import Color
+
+    from rich_color_ext import install, uninstall
+    from rich_color_ext.patch import _ORIGINAL_PARSE_ATTR
+
+    uninstall()
+    install()
+    foreign = staticmethod(lambda color: Color.from_rgb(1, 2, 3))
+    setattr(Color, "parse", foreign)
+    try:
+        uninstall()
+        assert Color.__dict__["parse"] is foreign
+    finally:
+        setattr(Color, "parse", _ORIGINAL_PARSE_ATTR)
+        uninstall()

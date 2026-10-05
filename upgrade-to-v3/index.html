@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../usage/">
       
       
-        <link rel="next" href="../upgrade-to-v3/">
+        <link rel="next" href="../reference/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Usage - rich-color-ext</title>
+        <title>How to Upgrade to v3.0.0 - rich-color-ext</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installing" class="md-skip">
+        <a href="#how-to-upgrade-to-v300" class="md-skip">
           Skip to content
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Usage
+              How to Upgrade to v3.0.0
             
           </span>
         </div>
@@ -296,6 +296,33 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -305,6 +332,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -313,7 +342,7 @@
   <span class="md-ellipsis">
     
   
-    Usage
+    Upgrade to v3.0.0
   
 
     
@@ -331,7 +360,7 @@
   <span class="md-ellipsis">
     
   
-    Usage
+    Upgrade to v3.0.0
   
 
     
@@ -347,6 +376,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -355,10 +386,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installing" class="md-nav__link">
+  <a href="#1-upgrade" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installing
+        1. Upgrade
       
     </span>
   </a>
@@ -366,10 +397,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-usage" class="md-nav__link">
+  <a href="#2-breaking-changes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Basic usage
+        2. Breaking changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Breaking changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#richs-parser-now-runs-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rich's parser now runs first
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-digit-hex-requires-the" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-digit hex requires the #
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#css_map-was-removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CSS_MAP was removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-find-code-that-needs-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Find code that needs changes
       
     </span>
   </a>
@@ -377,10 +458,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-parsing-works" class="md-nav__link">
+  <a href="#4-verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How parsing works
+        4. Verify
       
     </span>
   </a>
@@ -388,10 +469,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-uninstall-and-thread-safety" class="md-nav__link">
+  <a href="#what-else-is-new" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install, uninstall and thread safety
+        What else is new
       
     </span>
   </a>
@@ -399,10 +480,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#migrating-from-v2" class="md-nav__link">
+  <a href="#upgrading-from-v1-or-earlier" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Migrating from v2
+        Upgrading from v1 or earlier
       
     </span>
   </a>
@@ -413,33 +494,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../upgrade-to-v3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Upgrade to v3.0.0
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -693,99 +747,126 @@
   
 
 
-  <h1>Usage</h1>
-
-<div class="admonition note">
-<p class="admonition-title">Applies to v3.0.0</p>
-<p>The steps below describe the behaviour shipped with <code>rich-color-ext</code>
-<strong>v3.0.0</strong>. If you are on an older release, upgrade with <code>uv pip
-install --upgrade rich-color-ext</code> before following along.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Breaking change in v3.0.0</p>
-<p>Rich's parser now runs <strong>first</strong>; CSS names and 3-digit hex are only a fallback
-for colors Rich rejects. Names Rich already knows (<code>red</code>, <code>green</code>, <code>white</code>,
-<code>orchid</code>, ...) keep Rich's own color instead of the CSS truecolor value, and
-3-digit hex requires the leading <code>#</code> (<code>#09f</code>, not <code>09f</code>). The import-time
-<code>CSS_MAP</code> constant was removed; use <code>get_css_map()</code>. See
-<a href="../upgrade-to-v3/">How to Upgrade to v3.0.0</a> and the
-<a href="https://github.com/maxludden/rich-color-ext/blob/main/CHANGELOG.md">changelog</a>.</p>
-</div>
-<h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
-<p>Install using <code>uv</code>/<code>uv pip</code> (recommended):</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># via uv directly</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uv<span class="w"> </span>add<span class="w"> </span>rich-color-ext
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># or via pip through uv</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rich-color-ext
+<h1 id="how-to-upgrade-to-v300">How to Upgrade to v3.0.0<a class="headerlink" href="#how-to-upgrade-to-v300" title="Permanent link">&para;</a></h1>
+<p>v3.0.0 changes how <code>rich-color-ext</code> decides what a color string means. Most
+projects upgrade with no code changes, but three behaviors are <strong>breaking</strong>. This
+page shows what changed, how to find affected code, and how to fix it.</p>
+<h2 id="1-upgrade">1. Upgrade<a class="headerlink" href="#1-upgrade" title="Permanent link">&para;</a></h2>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">"rich-color-ext&gt;=3.0.0"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># or</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>rich-color-ext
 </span></code></pre></div>
-<p>Install from PyPI:</p>
-<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>rich-color-ext
+<p>Confirm the installed version:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import rich_color_ext; print(rich_color_ext.__version__)"</span>
 </span></code></pre></div>
-<h2 id="basic-usage">Basic usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
-<p>To enable the extended parsing behaviour, import and call <code>install()</code> once at
-startup in your program.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">install</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">install</span><span class="p">()</span>  <span class="c1"># Patch Rich's Color.parse method</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s2">"This text can include CSS colors like [bold rebeccapurple]rebeccapurple[/] or 3-digit hex like [#f0f]#f0f[/]."</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">)</span>
-</span></code></pre></div>
-<h2 id="how-parsing-works">How parsing works<a class="headerlink" href="#how-parsing-works" title="Permanent link">&para;</a></h2>
-<ol>
-<li><code>Color.parse(text)</code> calls Rich's original parser.</li>
-<li>If Rich raises <code>ColorParseError</code>, <code>#abc</code>-style hex is expanded to <code>#aabbcc</code>, or
-   the text is looked up (case-insensitively) in the CSS color map.</li>
-<li>Anything else re-raises Rich's original <code>ColorParseError</code>.</li>
-</ol>
-<p>Results are cached with <code>functools.lru_cache</code>. Call <code>uninstall()</code> to restore Rich's
-original <code>Color.parse</code>.</p>
-<h2 id="install-uninstall-and-thread-safety">Install, uninstall and thread safety<a class="headerlink" href="#install-uninstall-and-thread-safety" title="Permanent link">&para;</a></h2>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_css_map</span><span class="p">,</span> <span class="n">install</span><span class="p">,</span> <span class="n">is_installed</span><span class="p">,</span> <span class="n">uninstall</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">install</span><span class="p">()</span>  <span class="c1"># idempotent</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">assert</span> <span class="n">is_installed</span><span class="p">()</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">get_css_map</span><span class="p">()[</span><span class="s2">"rebeccapurple"</span><span class="p">]</span>  <span class="c1"># '#663399'</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">uninstall</span><span class="p">()</span>  <span class="c1"># restores Rich's original Color.parse exactly</span>
-</span></code></pre></div>
-<ul>
-<li><code>install()</code> and <code>uninstall()</code> are serialised with a lock, so they are safe to call
-  from several threads. <code>is_installed()</code> inspects <code>Color.parse</code> itself rather than a
-  separate flag. Parsing needs no lock.</li>
-<li>The patch is a <code>staticmethod</code>, so <code>Color.parse(...)</code> also works on a <code>Color</code> instance.</li>
-<li>Importing the package has <strong>no side effects</strong>: nothing is patched until you call
-  <code>install()</code>, and display-only Rich modules (<code>Panel</code>, <code>Table</code>, <code>Columns</code>) are
-  imported lazily.</li>
-</ul>
-<h2 id="migrating-from-v2">Migrating from v2<a class="headerlink" href="#migrating-from-v2" title="Permanent link">&para;</a></h2>
+<h2 id="2-breaking-changes">2. Breaking changes<a class="headerlink" href="#2-breaking-changes" title="Permanent link">&para;</a></h2>
+<h3 id="richs-parser-now-runs-first">Rich's parser now runs first<a class="headerlink" href="#richs-parser-now-runs-first" title="Permanent link">&para;</a></h3>
+<p>In v2, CSS color names were checked <strong>before</strong> Rich's parser. In v3, Rich always
+parses first and the CSS map is only a fallback for colors Rich rejects.</p>
+<p>Names that both Rich and CSS know now resolve to <strong>Rich's</strong> color (an ANSI or
+256-color value that follows the user's terminal theme), not the CSS truecolor hex.</p>
 <table>
 <thead>
 <tr>
+<th>Input</th>
 <th>v2</th>
 <th>v3</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>Color.parse("red")</code> → CSS truecolor <code>#ff0000</code></td>
-<td>Rich's ANSI <code>red</code> (Rich wins)</td>
+<td><code>red</code></td>
+<td><code>#ff0000</code> (truecolor)</td>
+<td>Rich's ANSI <code>red</code></td>
 </tr>
 <tr>
-<td><code>Color.parse("09f")</code> → <code>#0099ff</code></td>
-<td><code>ColorParseError</code>; use <code>#09f</code></td>
+<td><code>orchid</code></td>
+<td><code>#da70d6</code> (truecolor)</td>
+<td>Rich's 256-color <code>orchid</code></td>
 </tr>
 <tr>
-<td><code>from rich_color_ext import CSS_MAP</code></td>
-<td><code>from rich_color_ext import get_css_map</code></td>
+<td><code>rebeccapurple</code></td>
+<td><code>#663399</code></td>
+<td><code>#663399</code> (unchanged, Rich rejects it)</td>
+</tr>
+<tr>
+<td><code>#abc</code></td>
+<td><code>#aabbcc</code></td>
+<td><code>#aabbcc</code> (unchanged)</td>
 </tr>
 </tbody>
 </table>
-<p>The package also provides <code>CSSColor</code> helpers and a <code>get_css_map()</code> function to
-inspect the canonical list of supported CSS named colours.</p>
+<p>The affected names are those in the CSS map that Rich also accepts, including
+<code>black</code>, <code>blue</code>, <code>cyan</code>, <code>green</code>, <code>magenta</code>, <code>orchid</code>, <code>purple</code>, <code>red</code>, <code>tan</code>,
+<code>violet</code>, <code>white</code> and <code>yellow</code>.</p>
+<p><strong>If you need the exact CSS color</strong>, use the hex value directly:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_css_map</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">hex_red</span> <span class="o">=</span> <span class="n">get_css_map</span><span class="p">()[</span><span class="s2">"red"</span><span class="p">]</span>  <span class="c1"># '#ff0000'</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"exact CSS red"</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">hex_red</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="3-digit-hex-requires-the">3-digit hex requires the <code>#</code><a class="headerlink" href="#3-digit-hex-requires-the" title="Permanent link">&para;</a></h3>
+<p><code>09f</code> and <code>abc</code> are no longer parsed, so ordinary words such as <code>bad</code> or <code>add</code> can
+never be mistaken for colors. Write <code>#09f</code> and <code>#abc</code>.</p>
+<p><code>is_3digit_hex()</code> and <code>expand_3digit_hex()</code> follow the same rule: they require the
+leading <code>#</code>, and <code>expand_3digit_hex("abc")</code> now raises <code>ValueError</code>.</p>
+<h3 id="css_map-was-removed"><code>CSS_MAP</code> was removed<a class="headerlink" href="#css_map-was-removed" title="Permanent link">&para;</a></h3>
+<p>The import-time <code>CSS_MAP</code> constant is gone. Call <code>get_css_map()</code> instead; it builds
+the map on first use and caches it.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># v2</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">CSS_MAP</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># v3</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_css_map</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">CSS_MAP</span> <span class="o">=</span> <span class="n">get_css_map</span><span class="p">()</span>
+</span></code></pre></div>
+<h2 id="3-find-code-that-needs-changes">3. Find code that needs changes<a class="headerlink" href="#3-find-code-that-needs-changes" title="Permanent link">&para;</a></h2>
+<p>Search your project for the old patterns:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># bare 3-digit hex without '#', e.g. style="09f" or "[abc]text[/]"</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>grep<span class="w"> </span>-rnE<span class="w"> </span><span class="s2">"\[[0-9a-fA-F]{3}\]|\"[0-9a-fA-F]{3}\""</span><span class="w"> </span>src/
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># the removed constant</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"CSS_MAP"</span><span class="w"> </span>src/
+</span></code></pre></div>
+<p>Also review any place you pass the names listed above (<code>red</code>, <code>green</code>, <code>white</code>, ...)
+and rely on them being exact CSS truecolors, such as snapshot tests or exported SVG
+and HTML.</p>
+<h2 id="4-verify">4. Verify<a class="headerlink" href="#4-verify" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span><span class="p">,</span> <span class="n">ColorParseError</span><span class="p">,</span> <span class="n">ColorType</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich_color_ext</span><span class="w"> </span><span class="kn">import</span> <span class="n">install</span><span class="p">,</span> <span class="n">uninstall</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">install</span><span class="p">()</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">try</span><span class="p">:</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">assert</span> <span class="n">Color</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"#09F"</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"#0099ff"</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="k">assert</span> <span class="n">Color</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"rebeccapurple"</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">"#663399"</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="k">assert</span> <span class="n">Color</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"red"</span><span class="p">)</span><span class="o">.</span><span class="n">type</span> <span class="ow">is</span> <span class="n">ColorType</span><span class="o">.</span><span class="n">STANDARD</span>  <span class="c1"># Rich wins</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="n">Color</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"09f"</span><span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="k">except</span> <span class="n">ColorParseError</span><span class="p">:</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"bare hex rejected, as expected"</span><span class="p">)</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="k">finally</span><span class="p">:</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="n">uninstall</span><span class="p">()</span>
+</span></code></pre></div>
+<h2 id="what-else-is-new">What else is new<a class="headerlink" href="#what-else-is-new" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Instance calls work.</strong> <code>Color.parse(...)</code> can be called on a <code>Color</code> instance
+  again; v2 raised a <code>TypeError</code> once the patch was installed.</li>
+<li><strong>Cached parsing.</strong> The patched parser uses <code>functools.lru_cache</code>, like Rich's own.</li>
+<li><strong>Thread-safe install.</strong> <code>install()</code> and <code>uninstall()</code> are serialised with a
+  lock, and <code>is_installed()</code> inspects <code>Color.parse</code> directly.</li>
+<li><strong>Lighter import.</strong> Importing the package patches nothing, and <code>Panel</code>, <code>Table</code>
+  and <code>Columns</code> are only imported when needed.</li>
+<li><strong>Exact restore.</strong> <code>uninstall()</code> puts back Rich's original <code>classmethod</code>.</li>
+</ul>
+<h2 id="upgrading-from-v1-or-earlier">Upgrading from v1 or earlier<a class="headerlink" href="#upgrading-from-v1-or-earlier" title="Permanent link">&para;</a></h2>
+<p>v3 includes everything from v2.0.0: the CLI (<code>rich-color-ext</code>, <code>rich-color</code>) and the
+<code>loguru</code> logger were removed, along with the <code>loguru</code> dependency. If you used either,
+remove those calls before upgrading. See the
+<a href="https://github.com/maxludden/rich-color-ext/blob/main/CHANGELOG.md">changelog</a> for
+the full history.</p>
 
 
 

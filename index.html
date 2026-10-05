@@ -377,6 +377,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="upgrade-to-v3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade to v3.0.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -386,10 +413,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -407,8 +434,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -623,12 +650,16 @@
   <h1>Getting Started</h1>
 
 <p><a href="https://github.com/maxludden/rich-color-ext"><img alt="rich-color-ext" src="img/rich-color-ext-banner-short.svg" /></a></p>
-<p><code>rich-color-ext</code> extends the Rich library to parse 3-digit hex colors (<code>#09F</code>→<code>#0099FF</code>) and CSS color names (<code>rebeccapurple</code>→<code>#663399</code>). This project allows Rich users to write color names or short hex codes and have them correctly parsed into Rich Color instances.</p>
+<p><code>rich-color-ext</code> extends the Rich library to parse 3-digit hex colors (<code>#09F</code>→<code>#0099FF</code>, the <code>#</code> is required) and CSS color names (<code>rebeccapurple</code>→<code>#663399</code>). This project allows Rich users to write color names or short hex codes and have them correctly parsed into Rich Color instances.</p>
 <h2 id="key-features">Key features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Parse 3-digit hex colors like <code>#abc</code> → <code>#AABBCC</code></li>
+<li>Parse 3-digit hex colors like <code>#abc</code> → <code>#AABBCC</code> (the leading <code>#</code> is required)</li>
 <li>Parse CSS color names <code>rebeccapurple</code>, <code>mediumslateblue</code></li>
 <li>Lightweight monkey-patch to Rich's <code>Color.parse</code> to add the above support.</li>
+<li>Rich-first: Rich's parser runs first and the extensions are only a fallback, so
+  colors Rich already understands (e.g. ANSI <code>red</code>) are unchanged.</li>
+<li>Nothing is patched at import time; call <code>install()</code> explicitly. <code>install()</code> and
+  <code>uninstall()</code> are idempotent and thread-safe.</li>
 </ul>
 <p>For installation instructions, usage examples, packaging notes and more,
 see the sections linked from the navigation.</p>

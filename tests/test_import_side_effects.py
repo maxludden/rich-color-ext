@@ -10,6 +10,8 @@ import subprocess
 import sys
 from types import ModuleType
 
+import pytest
+
 
 def _reimport_package() -> ModuleType:
     # Remove package modules from sys.modules to force a fresh import.
@@ -69,5 +71,43 @@ assert not rich_color_ext.is_installed()
 assert not hasattr(rich_color_ext, "CSS_MAP")
 for m in ("rich.panel", "rich.table", "rich.columns"):
     assert m not in sys.modules, m
+"""
+    subprocess.run([sys.executable, "-c", code], check=True)
+
+
+@pytest.mark.parametrize("kind", ["classmethod", "staticmethod", "function"])
+def test_import_when_color_parse_is_already_patched(kind: str) -> None:
+    """Importing after another library replaced Color.parse must not fail, and install/uninstall must round-trip."""
+    code = f"""
+from rich.color import Color, ColorParseError
+
+rich_parse = Color.parse  # Rich's real parser, which the foreign patch wraps
+
+def foreign(*args):
+    *_, color = args
+    if color == "foreign":
+        return Color.from_rgb(1, 2, 3)
+    return rich_parse(color)
+
+kind = {kind!r}
+attr = {{"classmethod": classmethod, "staticmethod": staticmethod}}.get(kind, lambda f: f)(foreign)
+setattr(Color, "parse", attr)
+
+import rich_color_ext as rce  # must not raise at import time
+
+assert Color.__dict__["parse"] is attr and not rce.is_installed()
+rce.install()
+assert rce.is_installed()
+assert Color.parse("#09f").name == "#0099ff"  # fallback still applies
+assert Color.parse("rebeccapurple").name == "#663399"
+assert Color.parse("foreign").get_truecolor().red == 1  # delegated to the pre-existing parse
+try:
+    Color.parse("nonsense")
+except ColorParseError:
+    pass
+else:
+    raise AssertionError("expected ColorParseError")
+rce.uninstall()
+assert Color.__dict__["parse"] is attr
 """
     subprocess.run([sys.executable, "-c", code], check=True)

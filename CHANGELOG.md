@@ -26,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   receiving class so `MyColor.parse(...)` on a `Color` subclass still returns a
   `MyColor`, as in Rich. `uninstall()` now
   restores Rich's original `classmethod` object exactly.
+- Importing `rich_color_ext` no longer raises `AttributeError` when another library has
+  already replaced `Color.parse` with a plain function or staticmethod; the original
+  `parse` is now called through the descriptor protocol instead of via `__func__`.
+- `CSSColor.rich()` no longer renders unbalanced quotes (`name='x''`, unclosed `rgb='`).
+- `CSSColor` hex handling (`from_hex`, `hex_to_rgb`, the `hex` setter) now rejects a bare
+  3-digit value such as `abc`, matching the parser's "`#` required" rule. `#abc` and
+  bare 6-digit `aabbcc` are still accepted.
 
 ### Changed
 
@@ -40,6 +47,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   imports in `css.py` lazy.
 - `uninstall()` only restores Rich's parser if `Color.parse` is still this package's patch; a foreign monkeypatch is left untouched.
 - Added regression tests (instance calls, cache, Rich-first behaviour, bare words).
+- README and docs now state plainly that `Color.parse` tries Rich's parser first and falls back to
+  `rich-color-ext` only when Rich fails, and that `get_css_map()`/`CSSColor` don't follow that order.
+- `CSSColors` is now exported from the top-level package (`from rich_color_ext import CSSColors`).
+- Removed stale comments/docstrings and redundant `get_css_map() or get_css_map()` calls in `css.py`;
+  documented that `CSSColor.from_hex` picks the first name for aliased hex values (`aqua`/`cyan`, `gray`/`grey`).
 
 Includes all changes from v2.0.0 below.
 

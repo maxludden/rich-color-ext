@@ -66,3 +66,26 @@ def test_csscolor_from_rgb_roundtrip(name: str, hex_value: str) -> None:
     assert color.name == name
     assert color.hex.lower() == hex_value.lower()
     assert (color.red, color.green, color.blue) == (red, green, blue)
+
+
+def test_csscolors_exported_from_package() -> None:
+    import rich_color_ext
+
+    assert "CSSColors" in rich_color_ext.__all__
+    assert rich_color_ext.CSSColors.__name__ == "CSSColors"
+
+
+def test_csscolor_rich_repr_is_balanced() -> None:
+    """The plain text of CSSColor.rich() has matched quotes (no stray ``''``)."""
+    text = CSSColor.from_name("rebeccapurple").rich().plain
+    assert text == "CSSColor<hex='#663399', rgb='rgb(102,51,153)', name='rebeccapurple'>"
+
+
+def test_csscolor_bare_3digit_hex_is_rejected() -> None:
+    """Like the parser patch, 3-digit hex needs the leading '#'."""
+    assert CSSColor.hex_to_rgb("#abc") == (0xAA, 0xBB, 0xCC)
+    with pytest.raises(ValueError):
+        CSSColor.hex_to_rgb("abc")
+    with pytest.raises(ValueError):
+        CSSColor.from_hex("bad")
+    assert CSSColor.hex_to_rgb("aabbcc") == (0xAA, 0xBB, 0xCC)

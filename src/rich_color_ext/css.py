@@ -4,7 +4,7 @@ CSS color utilities and rich renderables.
 
 This module provides a small convenience wrapper, :class:`CSSColor`, for
 working with CSS color names and their hex/RGB representations, along with
-helpers to iterate all known colors. Data comes from ``_css_colors.get_css_map``.
+helpers to iterate all known colors. Data comes from :func:`get_css_map`.
 """
 
 from collections.abc import Generator
@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 __all__: list[str] = ["CSSColor", "CSSColors", "get_css_map"]
 
 
-# Console is only required for the demonstration block at module run-time.
 @lru_cache(maxsize=1024)
 def get_css_map() -> dict[str, str]:
     """
@@ -195,14 +194,16 @@ def _normalize_name(value: str) -> str:
 def _normalize_hex(value: str) -> str:
     """Normalize hex strings to canonical ``#RRGGBB``.
 
-    Accepts forms like ``#abc``, ``abc``, ``#aabbcc`` or ``aabbcc``.
-    Raises ValueError for invalid lengths.
+    Accepts ``#abc``, ``#aabbcc`` and ``aabbcc``. As with the Rich parser patch, a
+    3-digit value requires the leading ``#`` so bare words such as ``bad`` are never
+    treated as colors. Raises ValueError otherwise.
     """
     if isinstance(value, str):
         value = value.strip()
-    if value.startswith("#"):
+    had_hash = value.startswith("#")
+    if had_hash:
         value = value[1:]
-    if len(value) == 3:
+    if len(value) == 3 and had_hash:
         value = value[0] * 2 + value[1] * 2 + value[2] * 2
     elif len(value) != 6:
         raise ValueError("Hex value must be a string in the format '#RGB' or '#RRGGBB'.")
@@ -237,7 +238,6 @@ class CSSColor:
         You may provide any combination of name/hex/RGB sufficient to derive the
         remaining attributes. Values are normalized and validated.
         """
-        # log.debug(f"Creating CSSColor({name=}, {hex=}, {red=}, {green=}, {blue=})")
 
         self._name = ""
         self._hex = ""
@@ -267,7 +267,7 @@ class CSSColor:
             self._red, self._green, self._blue = r, g, b
 
         if not self._name and self._hex:
-            css_map = get_css_map() or get_css_map()
+            css_map = get_css_map()
             derived = _find_name_by_hex(self._hex, css_map)
             if derived:
                 self._name = derived
@@ -287,7 +287,6 @@ class CSSColor:
             raise ValueError("Name must be a non-empty string.")
         css_map = css_map or get_css_map()
         norm = _normalize_name(name)
-        # log.debug(f"Creating CSSColor from name: name={norm!r}")
         hex_value = css_map.get(norm)
         if not hex_value:
             raise ValueError(f"Unknown color name: {name}")
@@ -296,10 +295,14 @@ class CSSColor:
 
     @classmethod
     def from_hex(cls, hex: str, css_map: dict[str, str] | None = None) -> "CSSColor":  # pylint:disable=W0622
-        """Create a CSSColor instance from a hex value."""
+        """Create a CSSColor instance from a hex value.
+
+        Several CSS names share a hex value (``aqua``/``cyan``, ``gray``/``grey``, ...);
+        the first matching name in :func:`get_css_map` order is used.
+        """
         if not hex:
             raise ValueError("Hex value must be a non-empty string.")
-        css_map = css_map or get_css_map() or get_css_map()
+        css_map = css_map or get_css_map()
         norm_hex = _normalize_hex(hex)
         name = _find_name_by_hex(norm_hex, css_map)
         if name is None:
@@ -319,7 +322,7 @@ class CSSColor:
         for channel, label in ((red, "red"), (green, "green"), (blue, "blue")):
             if not 0 <= channel <= 255:
                 raise ValueError(f"{label.capitalize()} value must be between 0 and 255.")
-        css_map = css_map or get_css_map() or get_css_map()
+        css_map = css_map or get_css_map()
         hex_str = _hex_from_rgb(red, green, blue)
         name = _find_name_by_hex(hex_str, css_map)
         if name is None:
@@ -344,11 +347,9 @@ class CSSColor:
         Returns:
             Tuple[int, int, int]: The RGB components.
         """
-        # log.debug(f"Converting hex to RGB: hex_str={hex_str!r}")
         norm = _normalize_hex(hex_str)
         val = norm.lstrip("#")
         red, green, blue = (int(val[i : i + 2], 16) for i in (0, 2, 4))
-        # log.debug(f"Converted hex {norm} to RGB: red={red}, green={green}, blue={blue}")
         return (red, green, blue)
 
     @property
@@ -359,32 +360,27 @@ class CSSColor:
     @name.setter
     def name(self, value: str) -> None:
         """Set the name of the color."""
-        # log.debug(f"Setting name to: {value!r}")
         self._name = _normalize_name(value)
         if self._name in get_css_map() and not self._hex:
             self.hex = get_css_map()[self._name]
-            # log.debug(f"Set hex from name: {self.hex=}")
         if self._hex and any(v < 0 for v in (self._red, self._green, self._blue)):
             red, green, blue = self.hex_to_rgb(self._hex)
             self._red, self._green, self._blue = red, green, blue
-            # log.debug(f"Set RGB from hex: {self._red=}, {self._green=}, {self._blue=}")
 
     @property
     def hex(self) -> str:
         """Return the hex representation of the color."""
-        # log.debug(f"Getting hex: {self._hex=}")
         return self._hex
 
     @hex.setter
     def hex(self, value: str) -> None:
         """Set the hex representation of the color."""
-        # log.debug(f"Setting hex to: {value!r}")
         self._hex = _normalize_hex(value)
         if any(v < 0 for v in (self._red, self._green, self._blue)):
             red, green, blue = self.hex_to_rgb(self._hex)
             self._red, self._green, self._blue = red, green, blue
         if not self._name:
-            css_map = get_css_map() or get_css_map()
+            css_map = get_css_map()
             name = _find_name_by_hex(self._hex, css_map)
             if name:
                 self._name = name
@@ -392,13 +388,11 @@ class CSSColor:
     @property
     def red(self) -> int:
         """Return the red component of the color."""
-        # log.debug(f"Getting red: {self._red=}")
         return self._red
 
     @red.setter
     def red(self, value: int) -> None:
         """Set the red component of the color."""
-        # log.debug(f"Setting red to: {value}")
         if 0 <= value <= 255:
             self._red = value
         else:
@@ -407,7 +401,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = get_css_map() or get_css_map()
+                css_map = get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -415,13 +409,11 @@ class CSSColor:
     @property
     def green(self) -> int:
         """Return the green component of the color."""
-        # log.debug(f"Getting green: {self._green=}")
         return self._green
 
     @green.setter
     def green(self, value: int) -> None:
         """Set the green component of the color."""
-        # log.debug(f"Setting green to: {value}")
         if 0 <= value <= 255:
             self._green = value
         else:
@@ -430,7 +422,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = get_css_map() or get_css_map()
+                css_map = get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -438,13 +430,11 @@ class CSSColor:
     @property
     def blue(self) -> int:
         """Return the blue component of the color."""
-        # log.debug(f"Getting blue: {self._blue=}")
         return self._blue
 
     @blue.setter
     def blue(self, value: int) -> None:
         """Set the blue component of the color."""
-        # log.debug(f"Setting blue to: {value}")
         if 0 <= value <= 255:
             self._blue = value
         else:
@@ -453,7 +443,7 @@ class CSSColor:
             hex_str = _hex_from_rgb(self._red, self._green, self._blue)
             self.hex = hex_str
             if not self._name:
-                css_map = get_css_map() or get_css_map()
+                css_map = get_css_map()
                 name = _find_name_by_hex(self._hex, css_map)
                 if name:
                     self._name = name
@@ -471,8 +461,8 @@ class CSSColor:
                 Text(f"'{self.hex}'", style=color_style),
                 Text(", rgb='", style=label_style),
                 self.rgb(reverse),
-                Text(", name=", style=label_style),
-                Text(f"{self.name!r}'", style=color_style),
+                Text("', name=", style=label_style),
+                Text(f"{self.name!r}", style=color_style),
                 Text(">", style=color_style),
             ]
         )
@@ -537,9 +527,9 @@ class CSSColor:
 def get_css_colors(
     css_map: dict[str, str] | None = None,
 ) -> Generator[CSSColor, None, None]:
-    """Return a list of all CSS colors defined in the JSON file."""
+    """Yield a :class:`CSSColor` for every entry in ``css_map`` (default: all CSS colors)."""
     if css_map is None:
-        css_map = get_css_map() or get_css_map()
+        css_map = get_css_map()
     yield from (CSSColor.from_name(color, css_map) for color in css_map)
 
 

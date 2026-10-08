@@ -54,10 +54,21 @@ console.print(
 
 ## How parsing works
 
-1. `Color.parse(text)` calls Rich's original parser.
-2. If Rich raises `ColorParseError`, `#abc`-style hex is expanded to `#aabbcc`, or
-   the text is looked up (case-insensitively) in the CSS color map.
-3. Anything else re-raises Rich's original `ColorParseError`.
+`rich-color-ext` parses with Rich's own parser first and falls back to
+`rich-color-ext` only when Rich fails:
+
+1. `Color.parse(text)` calls Rich's original parser first. If Rich can parse the
+   text, that result is returned unchanged.
+2. Only if Rich raises `ColorParseError` does `rich-color-ext` try its own parsing:
+   `#abc`-style hex is expanded to `#aabbcc`, or the text is looked up
+   (case-insensitively) in the CSS color map.
+3. If `rich-color-ext` can't parse it either, Rich's original `ColorParseError` is
+   re-raised.
+
+!!! note "Only `Color.parse` is Rich-first"
+    `get_css_map()` and the `CSSColor` helpers don't consult Rich:
+    `get_css_map()["red"]` is the CSS hex `#ff0000`, while `Color.parse("red")` is
+    Rich's ANSI `red`.
 
 Results are cached with `functools.lru_cache`. Call `uninstall()` to restore Rich's
 original `Color.parse`.

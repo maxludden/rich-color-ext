@@ -21,10 +21,9 @@
 
 [`rich-color-ext`](https://GitHub.com/maxludden/rich-color-ext) extends the great [rich](http://GitHub.com/textualize/rich) library to be able to parse 3-digit hex colors (ie. <span style="color:#09f">`#09F`</span>, the `#` is required) and [CSS color names](https://www.w3.org/TR/css-color-4/#css-color) (ie. <span style="color:rebeccapurple;">`rebeccapurple`</span>).
 
-Rich's own parser always runs first. The extensions only apply to colors Rich rejects, so everything Rich already understands (including ANSI names like `red`) behaves exactly as before.
+`rich-color-ext` parses with Rich's own `Color.parse` **first** and only falls back to `rich-color-ext` when Rich fails (raises `ColorParseError`). Everything Rich already understands (including ANSI names like `red`) behaves exactly as before; the extensions only fill in what Rich rejects.
 
 > Warning: **Breaking changes in v3.0.0**
->> - Item
 >
 > - Rich's parser now runs **first**; CSS names and 3-digit hex are only a fallback for colors Rich rejects. Names Rich already knows (`red`, `green`, `white`, `orchid`, ...) keep Rich's own color instead of the CSS truecolor value.
 > - 3-digit hex requires the leading `#` (`#09f`, not `09f`).
@@ -79,11 +78,13 @@ console.print(
 
 ### How it works
 
-1. `Color.parse(text)` calls Rich's original parser.
-2. If Rich raises `ColorParseError`, `#abc` is expanded to `#aabbcc`, or the text is looked up (case-insensitively) in the CSS color map.
-3. Anything else re-raises Rich's original `ColorParseError`.
+1. `Color.parse(text)` calls Rich's original parser first. If Rich can parse the text, that result is returned unchanged.
+2. Only if Rich raises `ColorParseError` does `rich-color-ext` try its own parsing: `#abc` is expanded to `#aabbcc`, or the text is looked up (case-insensitively) in the CSS color map.
+3. If `rich-color-ext` can't parse it either, Rich's original `ColorParseError` is re-raised.
 
 Results are cached with `functools.lru_cache`, like Rich's own parser.
+
+> Note: this Rich-first order applies to `Color.parse` (and so to everything Rich parses through it, such as styles and markup). `get_css_map()` and the `CSSColor` helpers don't consult Rich: `get_css_map()["red"]` is the CSS hex `#ff0000`, while `Color.parse("red")` is Rich's ANSI `red`.
 
 ### Install, uninstall and inspect
 

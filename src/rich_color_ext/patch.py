@@ -10,7 +10,6 @@ unchanged.
 """
 
 import threading
-from collections.abc import Callable
 from functools import lru_cache
 from typing import Any
 
@@ -19,12 +18,25 @@ from rich.color import Color, ColorParseError
 from rich_color_ext.css import get_css_map
 from rich_color_ext.hex_utils import expand_3digit_hex, is_3digit_hex
 
-# Rich's raw ``parse`` class attribute (a classmethod). It is kept so ``uninstall``
-# restores ``Color.parse`` exactly, and its ``__func__`` is Rich's cached
-# ``(cls, color)`` implementation, which the patch delegates to so subclasses of
-# ``Color`` get instances of themselves back.
-_ORIGINAL_PARSE_ATTR = Color.__dict__["parse"]
-_ORIGINAL_PARSE_FUNC: Callable[[type[Color], str], Color] = _ORIGINAL_PARSE_ATTR.__func__
+# The raw ``parse`` class attribute as found at import time (Rich's classmethod,
+# unless another library patched it first). It is kept so ``uninstall`` restores
+# ``Color.parse`` exactly.
+_ORIGINAL_PARSE_ATTR: Any = Color.__dict__["parse"]
+
+
+def _original_parse(cls: type[Color], color: str) -> Color:
+    """
+    Call the original ``parse`` as ``cls.parse(color)`` would have.
+
+    Going through the descriptor protocol (rather than assuming a classmethod and
+    reading ``__func__``) binds ``cls`` for Rich's classmethod, so subclasses of
+    ``Color`` get instances of themselves back, and also copes with a ``parse``
+    that was replaced by a plain function or staticmethod before this module was
+    imported.
+    """
+    result: Color = _ORIGINAL_PARSE_ATTR.__get__(None, cls)(color)
+    return result
+
 
 # Serialises install()/uninstall(); _patched_parse itself is pure and needs no lock.
 _LOCK = threading.Lock()
@@ -52,14 +64,14 @@ def _patched_parse(cls: type[Color], color: str = "") -> Color:
         ColorParseError: If neither Rich nor the extensions can parse ``color``.
     """
     try:
-        return _ORIGINAL_PARSE_FUNC(cls, color)
+        return _original_parse(cls, color)
     except ColorParseError:
         color_str: str = color.strip().lower()
         if is_3digit_hex(color_str):
-            return _ORIGINAL_PARSE_FUNC(cls, expand_3digit_hex(color_str))
+            return _original_parse(cls, expand_3digit_hex(color_str))
         hex6 = get_css_map().get(color_str)
         if hex6 is not None:
-            return _ORIGINAL_PARSE_FUNC(cls, hex6)
+            return _original_parse(cls, hex6)
         raise
 
 

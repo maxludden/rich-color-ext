@@ -13,13 +13,14 @@ Call `install()` to enable the patch; importing the package does not apply it.
 For more information, see https://maxludden.github.io/rich-color-ext/
 """
 
-from rich_color_ext.css import CSSColor, get_css_map
+from rich_color_ext.css import CSSColor, CSSColors, get_css_map
 from rich_color_ext.patch import install, is_installed, uninstall
 
 __version__ = "3.0.0"
 
 __all__: list[str] = [
     "CSSColor",
+    "CSSColors",
     "__version__",
     "get_css_map",
     "install",

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Importing `rich_color_ext` no longer raises `AttributeError` when another library has
+  already replaced `Color.parse` with a plain function or staticmethod; the original
+  `parse` is now called through the descriptor protocol instead of via `__func__`.
+- `CSSColor.rich()` no longer renders unbalanced quotes (`name='x''`, unclosed `rgb='`).
+- `CSSColor` hex handling (`from_hex`, `hex_to_rgb`, the `hex` setter) now rejects a bare
+  3-digit value such as `abc`, matching the parser's "`#` required" rule. `#abc` and
+  bare 6-digit `aabbcc` are still accepted.
+
+### Changed
+
+- `CSSColors` is now exported from the top-level package (`from rich_color_ext import CSSColors`).
+- Removed stale comments/docstrings and redundant `get_css_map() or get_css_map()` calls in `css.py`;
+  documented that `CSSColor.from_hex` picks the first name for aliased hex values (`aqua`/`cyan`, `gray`/`grey`).
+
 ## v3.0.0 | 2026-10-04
 
 ### Breaking changes

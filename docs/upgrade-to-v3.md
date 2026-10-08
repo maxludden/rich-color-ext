@@ -26,8 +26,9 @@ python -c "import rich_color_ext; print(rich_color_ext.__version__)"
 
 ### Rich's parser now runs first
 
-In v2, CSS color names were checked **before** Rich's parser. In v3, Rich always
-parses first and the CSS map is only a fallback for colors Rich rejects.
+In v2, CSS color names were checked **before** Rich's parser. In v3,
+`rich-color-ext` parses with Rich's own `Color.parse` first and falls back to
+`rich-color-ext` (3-digit hex and the CSS map) only when Rich fails.
 
 Names that both Rich and CSS know now resolve to **Rich's** color (an ANSI or
 256-color value that follows the user's terminal theme), not the CSS truecolor hex.
@@ -42,6 +43,10 @@ Names that both Rich and CSS know now resolve to **Rich's** color (an ANSI or
 The affected names are those in the CSS map that Rich also accepts, including
 `black`, `blue`, `cyan`, `green`, `magenta`, `orchid`, `purple`, `red`, `tan`,
 `violet`, `white` and `yellow`.
+
+This order applies to `Color.parse` only. `get_css_map()` and the `CSSColor` helpers
+don't consult Rich, so they still return the CSS value (`get_css_map()["red"]` is
+`#ff0000`).
 
 **If you need the exact CSS color**, use the hex value directly:
 
